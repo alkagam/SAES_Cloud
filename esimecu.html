@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Acceso ESIME</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(15, 15, 20, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #004d26, #00ff88, #004d26);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+        }
+        @keyframes gradientMove { 0% {background-position: 100% 0;} 100% {background-position: -100% 0;} }
+        
+        .input-group { margin-bottom: 25px; position: relative; }
+        .input-field {
+            width: 100%; padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem;
+            transition: 0.3s; box-sizing: border-box;
+        }
+        .input-field:focus {
+            outline: none; border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+        }
+        .input-label {
+            position: absolute; top: -9px; left: 15px;
+            background: #050508; padding: 0 6px;
+            font-size: 0.65rem; color: #00ff88;
+            font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+        }
+        .login-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #004d26 0%, #00ff88 100%);
+            border: none; border-radius: 12px;
+            color: white; font-weight: bold; letter-spacing: 2px;
+            cursor: pointer; transition: 0.3s;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4); }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 20px; width: 85%; }
+            .input-group { margin-bottom: 20px; }
+            /* Usamos !important para sobrescribir el estilo en línea del h1 */
+            h1 { font-size: 1.8rem !important; letter-spacing: 2px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-point"></div>
+
+    <main class="login-wrapper">
+        <div class="login-card">
+            <div style="text-align: center; margin-bottom: 35px;">
+                <h1 style="font-size: 2.5rem; margin: 0; letter-spacing: 5px; font-weight: 800; color: white;">IPN<span style="color: #00ff88; font-weight: 300;">.CORE</span></h1>
+                <p style="font-family: 'JetBrains Mono'; font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 5px;">NODO: ESIME_CULHUACÁN_SECURE</p>
+            </div>
+
+            <form action="alumno/alumno-dashboard.html">
+                <div class="input-group"><label class="input-label">BOLETA / ID</label><input type="text" class="input-field" placeholder="2022..." required></div>
+                <div class="input-group"><label class="input-label">CONTRASEÑA</label><input type="password" class="input-field" placeholder="••••••••" required></div>
+                <button type="submit" class="login-btn">INICIAR_SESIÓN</button>
+            </form>
+
+            <div style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 0.75rem;">
+                <a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none;">¿Olvidaste tu contraseña?</a>
+                <a href="index.html" style="color: #00ff88; text-decoration: none;">Cambiar Nodo</a>
+            </div>
+        </div>
+        <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.6rem; opacity: 0.3;">ENCRIPTACIÓN: AES-256 // ESTADO: SEGURO</div>
+    </main>
+</body>
+</html>

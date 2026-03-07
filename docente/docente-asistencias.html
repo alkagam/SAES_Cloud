@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Asistencias</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/tema-verde.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .check-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
+            background: transparent; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center;
+        }
+        .check-btn.present { background: var(--neon-green); border-color: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .check-btn.absent { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        
+        .date-picker {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--doc-primary);
+            color: white; padding: 10px; border-radius: 6px; font-family: 'Inter';
+        }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DOCENTE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ING. PÉREZ</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ACADEMIA COMPUTACIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Control de Asistencia</h1>
+                <p class="mono-sub" style="color: var(--doc-primary) !important;">REGISTRO_DIARIO</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: var(--doc-primary); font-size: 1rem;">2CV2 - CÁLCULO VECTORIAL</h3>
+                <input type="date" class="date-picker" value="2024-03-15">
+            </div>
+
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>BOLETA</th>
+                            <th>ALUMNO</th>
+                            <th style="text-align: center;">ESTADO</th>
+                            <th style="text-align: center;">% ASISTENCIA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">2022640001</td>
+                            <td>MORALES S. SAUL</td>
+                            <td style="text-align: center;">
+                                <button class="check-btn present" onclick="this.classList.toggle('present'); this.classList.toggle('absent');"></button>
+                            </td>
+                            <td style="text-align: center; color: var(--neon-green);">95%</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">2021350220</td>
+                            <td>GARCÍA P. ANA</td>
+                            <td style="text-align: center;">
+                                <button class="check-btn present" onclick="this.classList.toggle('present'); this.classList.toggle('absent');"></button>
+                            </td>
+                            <td style="text-align: center; color: var(--neon-green);">100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn-doc" style="width: auto; padding: 10px 30px;">GUARDAR ASISTENCIA</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/docente-sidebar-loader.js"></script>
+</body>
+</html>

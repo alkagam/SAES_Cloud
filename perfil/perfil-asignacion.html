@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Asignación Docente</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --perfil-primary: #bf00ff; }
+        
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .select-control { 
+            flex: 1; min-width: 200px; padding: 12px; 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(191, 0, 255, 0.3); 
+            color: white; border-radius: 6px; font-family: 'Inter';
+        }
+        
+        .assignment-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px; border-radius: 10px; margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s;
+        }
+        .assignment-card:hover { border-color: var(--perfil-primary); background: rgba(191, 0, 255, 0.05); }
+        
+        .subject-info h3 { margin: 0; font-size: 1rem; color: white; }
+        .subject-info p { margin: 5px 0 0; font-size: 0.75rem; color: rgba(255,255,255,0.6); font-family: 'JetBrains Mono'; }
+        
+        .teacher-select {
+            padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+            color: white; border-radius: 4px; width: 250px; margin-right: 10px;
+        }
+        
+        .btn-assign {
+            background: var(--perfil-primary); color: white; border: none;
+            padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .btn-assign:hover { box-shadow: 0 0 15px var(--perfil-primary); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">PER<span style="color: #bf00ff;">.ACAD</span></span>
+            <div class="school-info"><span class="esime-name">LOGÍSTICA</span><span class="system-v" style="color:#bf00ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">COORD. ACAD</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">PERFIL ACADÉMICO</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Asignación Docente</h1>
+                <p class="mono-sub" style="color: #bf00ff !important;">SELECCIÓN_DE_PROFESORES // PERIODO_2025-1</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="filter-bar">
+                <select class="select-control"><option>Ingeniería en Computación</option></select>
+                <select class="select-control"><option>Semestre 3</option><option>Semestre 4</option></select>
+            </div>
+
+            <div class="assignment-list">
+                <!-- Item 1 -->
+                <div class="assignment-card">
+                    <div class="subject-info">
+                        <h3>CÁLCULO VECTORIAL</h3>
+                        <p>GRUPO: 2CV2 • HORAS: 4.5/SEM</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <select class="teacher-select">
+                            <option value="">Seleccionar Docente...</option>
+                            <option value="1">ING. JUAN PÉREZ LÓPEZ</option>
+                            <option value="2">DRA. ANA MARTÍNEZ</option>
+                            <option value="3">M. EN C. ROBERTO GÓMEZ</option>
+                        </select>
+                        <button class="btn-assign">ASIGNAR</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="assignment-card">
+                    <div class="subject-info">
+                        <h3>PROGRAMACIÓN ORIENTADA A OBJETOS</h3>
+                        <p>GRUPO: 2CV4 • HORAS: 4.5/SEM</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <select class="teacher-select">
+                            <option value="">Seleccionar Docente...</option>
+                            <option value="1">ING. JUAN PÉREZ LÓPEZ</option>
+                            <option value="2">DRA. ANA MARTÍNEZ</option>
+                            <option value="3" selected>M. EN C. ROBERTO GÓMEZ</option>
+                        </select>
+                        <button class="btn-assign" style="background: transparent; border: 1px solid var(--perfil-primary); color: var(--perfil-primary);">CAMBIAR</button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="assignment-card" style="border-color: #ffcc00;">
+                    <div class="subject-info">
+                        <h3>ESTRUCTURA DE DATOS</h3>
+                        <p>GRUPO: 3CV1 • HORAS: 4.5/SEM</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span style="color: #ffcc00; font-size: 0.7rem; margin-right: 15px; font-weight: bold;">SIN ASIGNAR</span>
+                        <select class="teacher-select">
+                            <option value="">Seleccionar Docente...</option>
+                            <option value="1">ING. JUAN PÉREZ LÓPEZ</option>
+                            <option value="2">DRA. ANA MARTÍNEZ</option>
+                        </select>
+                        <button class="btn-assign">ASIGNAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/perfil-sidebar-loader.js"></script>
+</body>
+</html>

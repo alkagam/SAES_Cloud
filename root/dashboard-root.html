@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | SYSTEM</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --root-green: #00ff00; }
+        .widget-head { color: var(--root-green) !important; border-bottom-color: rgba(0, 255, 0, 0.2) !important; }
+        .st-value { color: var(--root-green); text-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+        .terminal-log { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--root-green); opacity: 0.8; line-height: 1.5; }
+        .status-bar-fill { background: var(--root-green) !important; box-shadow: 0 0 10px var(--root-green) !important; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">ROOT<span style="color: white;">.SYS</span></span>
+            <div class="school-info"><span class="esime-name">INFRAESTRUCTURA</span><span class="system-v">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ROOT</span><span style="font-size:0.6rem; color:rgba(0,255,0,0.7);">SYSTEM ADMIN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">LOGOUT_</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>System Monitor</h1>
+                <p class="mono-sub" style="color: var(--root-green) !important;">UPTIME: 45d 12h 30m // KERNEL_PANIC: FALSE</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">STATUS:</span>
+                <span class="health-value" style="color: var(--root-green);">ALL SYSTEMS GO</span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="glass-widget">
+                <div class="widget-head">CPU LOAD</div>
+                <span class="st-value">12%</span>
+                <div class="status-bar-container" style="margin-top:10px;"><div class="status-bar-fill" style="width: 12%;"></div></div>
+            </div>
+            <div class="glass-widget">
+                <div class="widget-head">MEMORY USAGE</div>
+                <span class="st-value">8.4<span style="font-size:1rem;">GB</span></span>
+                <div class="status-bar-container" style="margin-top:10px;"><div class="status-bar-fill" style="width: 45%;"></div></div>
+            </div>
+            <div class="glass-widget wide-widget">
+                <div class="widget-head">TERMINAL LOG</div>
+                <div class="terminal-log">
+                    > [10:42:01] Connection established from 192.168.1.45<br>
+                    > [10:42:05] Auth check: PASSED<br>
+                    > [10:45:12] Warning: High latency on Node_02<br>
+                    > [10:46:00] Backup routine started...<br>
+                    > [10:46:05] Backup completed successfully.
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/root-sidebar-loader.js"></script>
+</body>
+</html>

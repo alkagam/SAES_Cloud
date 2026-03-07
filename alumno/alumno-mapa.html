@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Mapa Curricular</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00ff88; }
+        .ipn-logo, .system-v, .section-title, .nav-item.active, .nav-item:hover, .user-dot, .widget-header, .mono-sub, .health-value, .status-bar-fill, .btn-outline-cyan, .badge.available { color: var(--neon-green) !important; border-color: var(--neon-green) !important; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+        
+        .map-container { overflow-x: auto; padding-bottom: 20px; }
+        .semester-column { min-width: 200px; margin-right: 20px; display: inline-block; vertical-align: top; }
+        .semester-header { color: var(--neon-green); font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid rgba(0,255,136,0.3); padding-bottom: 5px; }
+        .subject-card { 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 15px; margin-bottom: 10px; border-radius: 8px; font-size: 0.8rem; 
+            position: relative; transition: 0.3s;
+        }
+        .subject-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
+        .subject-passed { border-left: 3px solid #00ff88; }
+        .subject-current { border-left: 3px solid #00d4ff; }
+        .subject-pending { border-left: 3px solid #666; opacity: 0.6; }
+        .credits { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; opacity: 0.5; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">SAES_CLOUD_V.26</span></div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">S. Morales</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span></div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Mapa Curricular</h1>
+                <p class="mono-sub">INGENIERÍA EN COMPUTACIÓN // PLAN 2020</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span style="color:#00ff88; margin-right:10px;">■ APROBADA</span>
+                <span style="color:#00d4ff; margin-right:10px;">■ CURSANDO</span>
+                <span style="color:#666;">■ PENDIENTE</span>
+            </div>
+        </header>
+
+        <div class="map-container">
+            <div class="semester-column">
+                <div class="semester-header">NIVEL 1</div>
+                <div class="subject-card subject-passed">Cálculo Diferencial<span class="credits">6.0</span></div>
+                <div class="subject-card subject-passed">Física Clásica<span class="credits">6.0</span></div>
+                <div class="subject-card subject-passed">Humanidades I<span class="credits">3.0</span></div>
+                <div class="subject-card subject-passed">Fundamentos de Prog.<span class="credits">7.5</span></div>
+            </div>
+            <div class="semester-column">
+                <div class="semester-header">NIVEL 2</div>
+                <div class="subject-card subject-passed">Cálculo Vectorial<span class="credits">6.0</span></div>
+                <div class="subject-card subject-passed">Electricidad y Mag.<span class="credits">6.0</span></div>
+                <div class="subject-card subject-passed">Humanidades II<span class="credits">3.0</span></div>
+                <div class="subject-card subject-passed">POO<span class="credits">7.5</span></div>
+            </div>
+            <div class="semester-column">
+                <div class="semester-header">NIVEL 3</div>
+                <div class="subject-card subject-current">Ecuaciones Dif.<span class="credits">6.0</span></div>
+                <div class="subject-card subject-current">Circuitos Eléctricos<span class="credits">6.0</span></div>
+                <div class="subject-card subject-current">Estructura de Datos<span class="credits">7.5</span></div>
+                <div class="subject-card subject-passed">Matemáticas Discretas<span class="credits">6.0</span></div>
+            </div>
+            <div class="semester-column">
+                <div class="semester-header">NIVEL 4</div>
+                <div class="subject-card subject-pending">Teoría de Autómatas<span class="credits">6.0</span></div>
+                <div class="subject-card subject-pending">Electrónica Analógica<span class="credits">6.0</span></div>
+                <div class="subject-card subject-pending">Análisis de Algoritmos<span class="credits">7.5</span></div>
+                <div class="subject-card subject-pending">Redes de Comp.<span class="credits">6.0</span></div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

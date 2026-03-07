@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | Logs</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --root-green: #00ff00; }
+        .cyber-table th { color: var(--root-green); border-bottom: 1px solid rgba(0, 255, 0, 0.3); font-family: 'JetBrains Mono'; }
+        .cyber-table td { font-family: 'JetBrains Mono'; font-size: 0.75rem; }
+        .log-crit { color: #ff0055; }
+        .log-warn { color: #ffcc00; }
+        .log-info { color: #00ff00; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">ROOT<span style="color: white;">.SYS</span></span>
+            <div class="school-info"><span class="esime-name">INFRAESTRUCTURA</span><span class="system-v">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ROOT</span><span style="font-size:0.6rem; color:rgba(0,255,0,0.7);">SYSTEM ADMIN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">LOGOUT_</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Access Logs</h1>
+                <p class="mono-sub" style="color: var(--root-green) !important;">AUDIT_TRAIL // SECURITY_EVENTS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>TIMESTAMP</th>
+                            <th>LEVEL</th>
+                            <th>IP ADDRESS</th>
+                            <th>USER</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2024-08-20 10:45:12</td><td class="log-crit">CRITICAL</td><td>192.168.1.200</td><td>UNKNOWN</td><td>Failed Login Attempt (x5)</td></tr>
+                        <tr><td>2024-08-20 10:42:05</td><td class="log-info">INFO</td><td>192.168.1.45</td><td>root</td><td>Session Started</td></tr>
+                        <tr><td>2024-08-20 10:30:00</td><td class="log-warn">WARNING</td><td>10.0.0.5</td><td>system</td><td>High CPU Usage (92%)</td></tr>
+                        <tr><td>2024-08-20 09:15:22</td><td class="log-info">INFO</td><td>192.168.1.10</td><td>dae_admin</td><td>Grade Update: Group 2CV2</td></tr>
+                        <tr><td>2024-08-20 08:00:01</td><td class="log-info">INFO</td><td>localhost</td><td>system</td><td>Daily Backup Completed</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button style="background: transparent; border: 1px solid var(--root-green); color: var(--root-green); padding: 8px 15px; border-radius: 4px; cursor: pointer; font-family: 'JetBrains Mono';">EXPORT LOGS</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/root-sidebar-loader.js"></script>
+</body>
+</html>

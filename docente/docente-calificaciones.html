@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Calificaciones</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/tema-verde.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .cyber-table th { color: var(--doc-primary); border-bottom: 1px solid rgba(0, 255, 136, 0.3); }
+        .grade-input {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; width: 50px; padding: 5px; text-align: center; border-radius: 4px;
+            font-family: 'JetBrains Mono';
+        }
+        .grade-input:focus { border-color: var(--doc-primary); outline: none; background: rgba(0, 255, 136, 0.1); }
+        
+        .select-group {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(0, 255, 136, 0.3);
+            color: white; padding: 10px; border-radius: 6px; width: 100%; max-width: 300px;
+            margin-bottom: 20px; font-family: 'Inter';
+        }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DOCENTE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ING. PÉREZ</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ACADEMIA COMPUTACIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Captura de Calificaciones</h1>
+                <p class="mono-sub" style="color: var(--doc-primary) !important;">ACTAS_ORDINARIAS // PERIODO_1</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <select class="select-group">
+                <option>2CV2 - CÁLCULO VECTORIAL</option>
+                <option>2CV4 - PROGRAMACIÓN OO</option>
+                <option>3CV1 - ESTRUCTURA DE DATOS</option>
+            </select>
+
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>BOLETA</th>
+                            <th>ALUMNO</th>
+                            <th style="text-align: center;">1ER PARCIAL</th>
+                            <th style="text-align: center;">2DO PARCIAL</th>
+                            <th style="text-align: center;">3ER PARCIAL</th>
+                            <th style="text-align: center;">EXTRA</th>
+                            <th style="text-align: center;">FINAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">2022640001</td>
+                            <td>MORALES S. SAUL</td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" value="8"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" placeholder="-"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" placeholder="-"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" disabled></td>
+                            <td style="text-align: center; font-weight: bold;">8.0</td>
+                        </tr>
+                        <tr>
+                            <td class="mono">2021350220</td>
+                            <td>GARCÍA P. ANA</td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" value="10"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" placeholder="-"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" placeholder="-"></td>
+                            <td style="text-align: center;"><input type="text" class="grade-input" disabled></td>
+                            <td style="text-align: center; font-weight: bold;">10.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn-doc" style="width: auto; padding: 10px 30px;">GUARDAR CAMBIOS</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/docente-sidebar-loader.js"></script>
+</body>
+</html>

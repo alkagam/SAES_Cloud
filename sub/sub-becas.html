@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Becas</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --sub-orange: #ffaa00; }
+        .cyber-table th { color: var(--sub-orange); border-bottom-color: rgba(255, 170, 0, 0.3); }
+        .status-ok { color: #00ff88; }
+        .status-pending { color: #ffaa00; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">SUB<span style="color: #ffaa00;">.SEIS</span></span>
+            <div class="school-info"><span class="esime-name">BIENESTAR</span><span class="system-v" style="color:#ffaa00;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">DR. SALUD</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">SUBDIRECCIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Becas y Apoyos</h1>
+                <p class="mono-sub" style="color: #ffaa00 !important;">INSTITUCIONAL // MANUTENCIÓN</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>FOLIO</th>
+                            <th>ALUMNO</th>
+                            <th>TIPO DE BECA</th>
+                            <th>ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BEC-2024-001</td>
+                            <td>MORALES S. SAUL</td>
+                            <td>INSTITUCIONAL A</td>
+                            <td class="status-ok">VALIDADA</td>
+                        </tr>
+                        <tr>
+                            <td>BEC-2024-002</td>
+                            <td>GARCÍA P. ANA</td>
+                            <td>TRANSPORTE</td>
+                            <td class="status-pending">EN REVISIÓN</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-widget wide-widget" style="margin-top: 20px;">
+            <div class="widget-head" style="color: var(--sub-orange);">VALIDACIÓN DE DATOS SOCIOECONÓMICOS</div>
+            <form>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">BOLETA</label>
+                        <input type="text" placeholder="Ingrese Boleta" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">NOMBRE COMPLETO</label>
+                        <input type="text" placeholder="Nombre del Alumno" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">PROMEDIO GLOBAL</label>
+                        <input type="text" placeholder="0.0" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">INGRESOS MENSUALES FAMILIARES</label>
+                        <input type="text" placeholder="$0.00" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: right;">
+                    <button style="background: var(--sub-orange); color: black; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">ACTUALIZAR EXPEDIENTE</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="../js/sub-sidebar-loader.js"></script>
+</body>
+</html>

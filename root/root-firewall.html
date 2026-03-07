@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | Firewall</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --root-green: #00ff00; }
+        .rule-card {
+            background: rgba(0, 20, 0, 0.5); border: 1px solid rgba(0, 255, 0, 0.2);
+            padding: 15px; border-radius: 6px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .rule-info strong { color: var(--root-green); font-family: 'JetBrains Mono'; display: block; }
+        .rule-info span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        
+        /* Toggle Switch Green */
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--root-green); }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">ROOT<span style="color: white;">.SYS</span></span>
+            <div class="school-info"><span class="esime-name">INFRAESTRUCTURA</span><span class="system-v">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ROOT</span><span style="font-size:0.6rem; color:rgba(0,255,0,0.7);">SYSTEM ADMIN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">LOGOUT_</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Firewall Rules</h1>
+                <p class="mono-sub" style="color: var(--root-green) !important;">NETWORK_SECURITY // IPTABLES</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-head" style="color: var(--root-green);">INBOUND TRAFFIC</div>
+            
+            <div class="rule-card">
+                <div class="rule-info"><strong>PORT 80 (HTTP)</strong><span>Web Server Traffic</span></div>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="rule-card">
+                <div class="rule-info"><strong>PORT 443 (HTTPS)</strong><span>Secure Web Traffic</span></div>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="rule-card">
+                <div class="rule-info"><strong>PORT 22 (SSH)</strong><span>Remote Administration</span></div>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="rule-card">
+                <div class="rule-info"><strong>PORT 3306 (MySQL)</strong><span>Database Access (External)</span></div>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+        </div>
+    </main>
+    <script src="../js/root-sidebar-loader.js"></script>
+</body>
+</html>

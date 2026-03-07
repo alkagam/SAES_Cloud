@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Actas DAE</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --dae-primary: #ff0055; }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        
+        .cyber-table th { color: var(--dae-primary); border-bottom: 1px solid rgba(255,0,85,0.3); }
+        .badge-status { padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; border: 1px solid; }
+        .status-open { border-color: #00ff88; color: #00ff88; background: rgba(0,255,136,0.1); }
+        .status-closed { border-color: #ff0055; color: #ff0055; background: rgba(255,0,85,0.1); }
+        .status-audit { border-color: #ffcc00; color: #ffcc00; background: rgba(255,204,0,0.1); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DAE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Actas y Calificaciones</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">CONTROL_DE_EVALUACIONES // PERIODOS_ORDINARIOS_Y_ETS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-dae" style="background: var(--dae-primary); color: white;">ACTAS ORDINARIAS</button>
+                <button class="btn-dae">ACTAS ETS</button>
+                <button class="btn-dae">SABERES PREVIOS</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>FOLIO</th>
+                            <th>MATERIA</th>
+                            <th>GRUPO</th>
+                            <th>PROFESOR</th>
+                            <th>ESTADO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">ACT-2024-001</td>
+                            <td>CÁLCULO VECTORIAL</td>
+                            <td>2CV2</td>
+                            <td>ANA MARTÍNEZ</td>
+                            <td><span class="badge-status status-open">ABIERTA</span></td>
+                            <td><button class="btn-dae" style="font-size: 0.6rem;">AUDITAR</button></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">ACT-2024-002</td>
+                            <td>PROGRAMACIÓN OO</td>
+                            <td>2CV4</td>
+                            <td>ROBERTO GÓMEZ</td>
+                            <td><span class="badge-status status-closed">CERRADA</span></td>
+                            <td><button class="btn-dae" style="font-size: 0.6rem;">REABRIR</button></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">ACT-2024-003</td>
+                            <td>FÍSICA CLÁSICA</td>
+                            <td>1CM1</td>
+                            <td>CARLOS RUIZ</td>
+                            <td><span class="badge-status status-audit">EN REVISIÓN</span></td>
+                            <td><button class="btn-dae" style="font-size: 0.6rem;">AUTORIZAR</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/dae-sidebar-loader.js"></script>
+</body>
+</html>

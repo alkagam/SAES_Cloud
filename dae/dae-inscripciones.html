@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Inscripciones DAE</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --dae-primary: #ff0055; }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        
+        .capacity-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+        .capacity-fill { height: 100%; background: var(--dae-primary); }
+        .group-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,0,85,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        .group-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; color: white; }
+        .group-meta { font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 5px; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DAE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Control de Inscripciones</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">PERIODO_2025-1 // MONITOREO_EN_TIEMPO_REAL</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">PROCESO:</span>
+                <span class="health-value" style="color: #00ff88;">ACTIVO (DÍA 2/5)</span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Columna Izquierda: Resumen -->
+            <div class="glass-widget">
+                <div class="widget-header">ESTADÍSTICAS DEL DÍA</div>
+                <div style="margin-bottom: 20px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
+                        <span>Alumnos Inscritos Hoy</span>
+                        <span style="color: var(--dae-primary);">85%</span>
+                    </div>
+                    <div class="capacity-bar"><div class="capacity-fill" style="width: 85%;"></div></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:5px;">
+                        <span>Saturación de Grupos</span>
+                        <span style="color: #ffcc00;">62%</span>
+                    </div>
+                    <div class="capacity-bar"><div class="capacity-fill" style="width: 62%; background: #ffcc00;"></div></div>
+                </div>
+                <button class="btn-dae" style="width: 100%;">GENERAR REPORTE DE CIERRE</button>
+            </div>
+
+            <!-- Columna Derecha: Grupos Críticos -->
+            <div class="glass-widget wide-widget">
+                <div class="widget-header">GRUPOS CON ALTA DEMANDA</div>
+                
+                <div class="group-card">
+                    <div class="group-header"><span>3CV1 - ESTRUCTURA DE DATOS</span> <span style="color: #ff0055;">LLENO</span></div>
+                    <div class="group-meta">Prof. Alan Turing • Cupo: 30/30</div>
+                    <div class="capacity-bar"><div class="capacity-fill" style="width: 100%;"></div></div>
+                    <div style="text-align: right; margin-top: 10px;"><button class="btn-dae" style="font-size: 0.6rem;">AMPLIAR CUPO (+5)</button></div>
+                </div>
+
+                <div class="group-card">
+                    <div class="group-header"><span>1CM2 - CÁLCULO DIFERENCIAL</span> <span style="color: #ffcc00;">90%</span></div>
+                    <div class="group-meta">Prof. Isaac Newton • Cupo: 27/30</div>
+                    <div class="capacity-bar"><div class="capacity-fill" style="width: 90%; background: #ffcc00;"></div></div>
+                </div>
+
+                <div class="group-card">
+                    <div class="group-header"><span>5CV4 - REDES DE COMPUTADORAS</span> <span style="color: #00ff88;">DISPONIBLE</span></div>
+                    <div class="group-meta">Prof. Tim Berners-Lee • Cupo: 15/30</div>
+                    <div class="capacity-bar"><div class="capacity-fill" style="width: 50%; background: #00ff88;"></div></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <script src="../js/dae-sidebar-loader.js"></script>
+</body>
+</html>

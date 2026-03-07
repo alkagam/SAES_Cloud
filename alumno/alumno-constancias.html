@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Constancias</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00ff88; }
+        .ipn-logo, .system-v, .section-title, .nav-item.active, .nav-item:hover, .user-dot, .widget-header, .mono-sub, .health-value, .status-bar-fill, .btn-outline-cyan, .badge.available { color: var(--neon-green) !important; border-color: var(--neon-green) !important; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+        select { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">SAES_CLOUD_V.26</span></div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">S. Morales</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span></div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Solicitud de Constancias</h1>
+                <p class="mono-sub">DOCUMENTOS_OFICIALES // FIRMA_DIGITAL</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-header">NUEVA SOLICITUD</div>
+            <label style="font-size: 0.7rem; color: var(--neon-green); display: block; margin-bottom: 5px;">TIPO DE DOCUMENTO</label>
+            <select>
+                <option>Constancia de Estudios (Sin Calificaciones)</option>
+                <option>Constancia de Estudios (Con Calificaciones)</option>
+                <option>Boleta Global Informativa</option>
+                <option>Constancia de Inscripción</option>
+            </select>
+            <button class="btn-outline-cyan">SOLICITAR DOCUMENTO</button>
+
+            <div style="margin-top: 30px;">
+                <div class="widget-header">HISTORIAL DE SOLICITUDES</div>
+                <ul class="action-list">
+                    <li><span>Constancia de Estudios (10/AGO)</span> <span class="badge available">DESCARGAR PDF</span></li>
+                    <li><span>Boleta Global (15/ENE)</span> <span class="badge available">DESCARGAR PDF</span></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

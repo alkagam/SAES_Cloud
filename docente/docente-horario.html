@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Horario Docente</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/tema-verde.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .schedule-grid {
+            display: grid; grid-template-columns: 80px repeat(5, 1fr); gap: 10px;
+            margin-top: 20px; overflow-x: auto;
+        }
+        .day-header { text-align: center; color: var(--doc-primary); font-weight: bold; padding: 10px; background: rgba(0, 255, 136, 0.1); border-radius: 6px; }
+        .time-slot { text-align: right; padding: 10px; color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+        .class-block {
+            background: rgba(0, 255, 136, 0.15); border: 1px solid var(--doc-primary);
+            border-radius: 6px; padding: 10px; font-size: 0.75rem; color: white;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .class-block strong { color: var(--doc-primary); display: block; margin-bottom: 4px; }
+        .empty-slot { background: rgba(255,255,255,0.02); border-radius: 6px; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DOCENTE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ING. PÉREZ</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ACADEMIA COMPUTACIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Horario Semanal</h1>
+                <p class="mono-sub" style="color: var(--doc-primary) !important;">CICLO_ESCOLAR_2025-1</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="schedule-grid">
+                <!-- Headers -->
+                <div></div>
+                <div class="day-header">LUNES</div>
+                <div class="day-header">MARTES</div>
+                <div class="day-header">MIÉRCOLES</div>
+                <div class="day-header">JUEVES</div>
+                <div class="day-header">VIERNES</div>
+
+                <!-- 7:00 - 8:30 -->
+                <div class="time-slot">07:00<br>08:30</div>
+                <div class="class-block"><strong>Cálculo Vectorial</strong>2CV2 • Salón 101</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Cálculo Vectorial</strong>2CV2 • Salón 101</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Cálculo Vectorial</strong>2CV2 • Salón 101</div>
+
+                <!-- 8:30 - 10:00 -->
+                <div class="time-slot">08:30<br>10:00</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Prog. Orientada a Objetos</strong>2CV4 • Lab 3</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Prog. Orientada a Objetos</strong>2CV4 • Lab 3</div>
+                <div class="empty-slot"></div>
+
+                <!-- 10:00 - 11:30 -->
+                <div class="time-slot">10:00<br>11:30</div>
+                <div class="class-block"><strong>Estructura de Datos</strong>3CV1 • Lab 1</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Estructura de Datos</strong>3CV1 • Lab 1</div>
+                <div class="empty-slot"></div>
+                <div class="class-block"><strong>Estructura de Datos</strong>3CV1 • Lab 1</div>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn-doc" style="width: auto;">DESCARGAR PDF</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/docente-sidebar-loader.js"></script>
+</body>
+</html>

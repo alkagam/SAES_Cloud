@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Horarios Maestros</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --gestion-cyan: #00d4ff; }
+        .schedule-grid {
+            display: grid; grid-template-columns: 80px repeat(5, 1fr); gap: 10px;
+            margin-top: 20px; overflow-x: auto;
+        }
+        .day-header { text-align: center; color: var(--gestion-cyan); font-weight: bold; padding: 10px; background: rgba(0, 212, 255, 0.1); border-radius: 4px; font-size: 0.8rem; }
+        .time-slot { text-align: right; padding: 10px; color: rgba(255,255,255,0.5); font-size: 0.7rem; }
+        .class-block, .empty-slot {
+            border-radius: 6px; padding: 5px; font-size: 0.7rem; color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 60px;
+            transition: 0.3s;
+        }
+        .class-block {
+            background: rgba(0, 212, 255, 0.1); border: 1px solid var(--gestion-cyan);
+        }
+        .empty-slot { 
+            background: rgba(255,255,255,0.02); 
+            border: 1px dashed rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        .empty-slot:hover { background: rgba(0, 212, 255, 0.05); border-color: var(--gestion-cyan); }
+        .form-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+        .form-row > div { flex: 1; min-width: 200px; }
+        .select-control { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); color: white; border-radius: 6px; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">GES<span style="color: #00d4ff;">.ESC</span></span>
+            <div class="school-info"><span class="esime-name">OPERACIONES</span><span class="system-v" style="color:#00d4ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot" style="background: #00d4ff; box-shadow: 0 0 10px #00d4ff;"></span>
+            <div><span style="font-weight:bold; color:white;">OPERADOR 1</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">GESTIÓN ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Asignación de Horarios</h1>
+                <p class="mono-sub" style="color: #00d4ff !important;">PLANIFICACIÓN_ACADÉMICA</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="form-row">
+                <div>
+                    <label style="display: block; font-size: 0.7rem; color: var(--gestion-cyan); margin-bottom: 5px;">SELECCIONAR DOCENTE</label>
+                    <select class="select-control">
+                        <option>ING. PÉREZ LÓPEZ JUAN</option>
+                        <option>DRA. MARTÍNEZ ANA</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.7rem; color: var(--gestion-cyan); margin-bottom: 5px;">MATERIA A ASIGNAR</label>
+                    <select id="materia-select" class="select-control">
+                        <option value="Cálculo Vec.">Cálculo Vectorial</option>
+                        <option value="POO">Programación Orientada a Objetos</option>
+                        <option value="Estructura D.">Estructura de Datos</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.7rem; color: var(--gestion-cyan); margin-bottom: 5px;">GRUPO</label>
+                    <select id="grupo-select" class="select-control">
+                        <option>2CV2</option>
+                        <option>2CV4</option>
+                        <option>3CV1</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="schedule-grid">
+                <div></div><div class="day-header">LUN</div><div class="day-header">MAR</div><div class="day-header">MIE</div><div class="day-header">JUE</div><div class="day-header">VIE</div>
+                <div class="time-slot">07:00</div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div>
+                <div class="time-slot">08:30</div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div>
+                <div class="time-slot">10:00</div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div><div class="empty-slot"></div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.querySelector('.schedule-grid');
+            const materiaSelect = document.getElementById('materia-select');
+            const grupoSelect = document.getElementById('grupo-select');
+
+            grid.addEventListener('click', (e) => {
+                const slot = e.target.closest('.empty-slot, .class-block');
+                if (!slot) return;
+
+                if (slot.classList.contains('empty-slot')) {
+                    const materia = materiaSelect.value;
+                    const grupo = grupoSelect.value;
+                    slot.classList.replace('empty-slot', 'class-block');
+                    slot.innerHTML = `<strong>${grupo}</strong><span>${materia}</span>`;
+                } else {
+                    slot.classList.replace('class-block', 'empty-slot');
+                    slot.innerHTML = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

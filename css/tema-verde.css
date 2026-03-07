@@ -1,0 +1,61 @@
+/* TEMA VERDE (ESTILO ALUMNO) */
+:root {
+    --neon-green: #00ff88;
+    --doc-primary: #00ff88; /* Override para usar verde en componentes docentes */
+    
+    /* Forzar variables del Sidebar (inyectado por JS) a verde */
+    --doc-cyan: #00ff88 !important;
+    --doc-cyan-dim: rgba(0, 255, 136, 0.15) !important;
+}
+
+/* Overrides Globales */
+.ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
+.system-v { color: var(--neon-green) !important; }
+.user-dot { background: var(--neon-green) !important; box-shadow: 0 0 10px var(--neon-green) !important; }
+.btn-exit:hover { color: var(--neon-green) !important; }
+
+/* Componentes de Perfil */
+.profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+.profile-pic { 
+    width: 80px; height: 80px; 
+    background: var(--neon-green); 
+    border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 2rem; color: #000; font-weight: bold; 
+}
+
+.form-group { margin-bottom: 15px; }
+.form-group label { 
+    display: block; color: var(--neon-green); 
+    font-size: 0.7rem; margin-bottom: 5px; font-weight: bold; 
+}
+
+.form-control { 
+    width: 100%; background: rgba(255,255,255,0.05); 
+    border: 1px solid rgba(255,255,255,0.1); 
+    padding: 10px; color: white; border-radius: 6px; 
+    font-family: 'Inter', sans-serif;
+}
+.form-control:focus { border-color: var(--neon-green); outline: none; }
+.form-control[readonly] { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.5); cursor: not-allowed; }
+
+.btn-doc {
+    background: transparent; border: 1px solid var(--neon-green);
+    color: var(--neon-green); padding: 8px 12px;
+    border-radius: 6px; font-family: 'JetBrains Mono';
+    font-size: 0.7rem; cursor: pointer; transition: all 0.3s ease;
+}
+.btn-doc:hover {
+    background: var(--neon-green); color: #000;
+    box-shadow: 0 0 15px var(--neon-green);
+}
+
+.chart-placeholder { 
+    width: 100%; height: 150px; 
+    background: rgba(0,0,0,0.2); border: 1px dashed rgba(0, 255, 136, 0.3); 
+    display: flex; align-items: center; justify-content: center; 
+    border-radius: 8px; color: rgba(255,255,255,0.3); font-size: 0.8rem; font-family: 'JetBrains Mono';
+}
+
+/* Tablas y Listas */
+.cyber-table th { color: var(--neon-green) !important; border-bottom-color: rgba(0, 255, 136, 0.3) !important; }

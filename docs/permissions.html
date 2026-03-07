@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPN | Matriz RBAC</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="gateway-hub">
+    
+    <div class="stars-overlay"></div>
+    
+    <header class="hub-header">
+        <div class="container flex-between">
+            <div class="brand-logo">
+                <span class="ipn-text">SYS</span><span class="core-text">.DOCS</span>
+            </div>
+            <a href="../index.html" style="color: var(--cyan); text-decoration: none; font-size: 0.8rem;">VOLVER AL GATEWAY</a>
+        </div>
+    </header>
+
+    <main class="container hub-main" style="justify-content: flex-start; padding-top: 40px;">
+        <section class="hero-text" style="margin-bottom: 20px; text-align: left;">
+            <h1 class="main-title" style="font-size: 2rem; letter-spacing: 5px;">MATRIZ DE PERMISOS</h1>
+            <p class="subtitle">CONTROL DE ACCESO BASADO EN ROLES (RBAC) // NIVEL DE SEGURIDAD: ALTO</p>
+        </section>
+
+        <div class="table-responsive">
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th width="20%">ACTOR</th>
+                        <th width="40%">DOMINIO DE ACCIÓN (PERMITIDO)</th>
+                        <th width="40%">RESTRICCIÓN ESTRICTA (DENEGADO)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="role-badge">DAE</span></td>
+                        <td><strong>Dueño de Datos Maestros:</strong> Alta/Baja/Cambio de alumnos, profesores y materias, cambio de calificaciones, cambio de carrera del alumno.</td>
+                        <td>Ninguna a nivel de catálogo. Tienen control total sobre las entidades principales.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge">GESTIÓN ESCOLAR</span></td>
+                        <td><strong>Operación Académica:</strong> Ejecuta inscripciones, asigna salones, genera documentos, lee trayectorias y vigila las fechas establecidas del IPN.</td>
+                        <td><span style="color: #ffcc00;">NO modifica datos maestros</span> (no puede alterar el nombre de un alumno o los créditos de una materia).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge">DOCENTES</span></td>
+                        <td><strong>Evaluación y Acompañamiento:</strong> Sube calificaciones, pasa lista, ve sus horarios y listas, revisa sus estadísticas de evaluación.</td>
+                        <td>NO modifica datos del sistema, alumnos o materias. Solo escribe en actas de calificación.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge">PERFIL ACADÉMICO</span></td>
+                        <td><strong>Logística Docente:</strong> Asigna profesores a las materias creadas por la DAE, programa exámenes de titulación.</td>
+                        <td>NO modifica datos maestros. Solo crea relaciones (Profesor <-> Materia).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge">SUB ACADÉMICOS</span></td>
+                        <td><strong>Expedientes Alternos:</strong> Captura información complementaria (médica, deportiva, cultural).</td>
+                        <td>NO modifica datos académicos ni administrativos. Su escritura está aislada a esos expedientes.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge">ROOT</span></td>
+                        <td><strong>Infraestructura:</strong> Monitoreo del estado del sistema, revisión de logs y carga de los servidores.</td>
+                        <td>No interactúa con la lógica de negocio ni altera calificaciones.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="role-badge" style="border-color: #00d4ff; color: #00d4ff; background: rgba(0, 212, 255, 0.1);">ALUMNO</span></td>
+                        <td><strong>Autogestión:</strong> Consulta su trayectoria, calificaciones y horarios. Ejecuta su inscripción/reinscripción, tramita documentos y evalúa profesores.</td>
+                        <td>Solo tiene permisos de lectura global y permisos de escritura limitados a sus propios procesos (su inscripción).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--text-dim);">
+            > END_OF_FILE<br>
+            > INTEGRITY_CHECK: OK
+        </div>
+    </main>
+
+</body>
+</html>

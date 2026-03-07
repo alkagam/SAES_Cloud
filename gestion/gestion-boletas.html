@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Boletas y Actas</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --gestion-cyan: #00d4ff; }
+        .doc-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 15px; border-radius: 8px; display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 10px;
+        }
+        .doc-icon { font-size: 1.5rem; margin-right: 15px; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">GES<span style="color: #00d4ff;">.ESC</span></span>
+            <div class="school-info"><span class="esime-name">OPERACIONES</span><span class="system-v" style="color:#00d4ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot" style="background: #00d4ff; box-shadow: 0 0 10px #00d4ff;"></span>
+            <div><span style="font-weight:bold; color:white;">OPERADOR 1</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">GESTIÓN ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Emisión de Documentos</h1>
+                <p class="mono-sub" style="color: #00d4ff !important;">BOLETAS // ACTAS // CONSTANCIAS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <input type="text" placeholder="Buscar Boleta o Grupo..." style="flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); color: white; border-radius: 6px;">
+                <button style="background: var(--gestion-cyan); border: none; padding: 0 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">BUSCAR</button>
+            </div>
+
+            <div class="doc-list">
+                <div class="doc-card">
+                    <div style="display: flex; align-items: center;">
+                        <span class="doc-icon">📄</span>
+                        <div><div style="font-weight: bold;">Boleta Global - 2022640001</div><div style="font-size: 0.7rem; opacity: 0.7;">MORALES S. SAUL • Generado: Hoy 10:00 AM</div></div>
+                    </div>
+                    <button class="btn-outline-cyan" style="width: auto; margin: 0;">IMPRIMIR</button>
+                </div>
+                <div class="doc-card">
+                    <div style="display: flex; align-items: center;">
+                        <span class="doc-icon">📑</span>
+                        <div><div style="font-weight: bold;">Acta de Calificaciones - 2CV2</div><div style="font-size: 0.7rem; opacity: 0.7;">CÁLCULO VECTORIAL • Cierre: Pendiente</div></div>
+                    </div>
+                    <button class="btn-outline-cyan" style="width: auto; margin: 0;">VER DETALLE</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion-sidebar-loader.js"></script>
+</body>
+</html>

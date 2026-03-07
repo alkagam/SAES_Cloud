@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Evaluación Docente</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* --- TEMA VERDE (Igual que el Dashboard) --- */
+        :root { --neon-green: #00ff88; --glass-green: rgba(0, 255, 136, 0.05); }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .system-v { color: var(--neon-green) !important; }
+        .section-title { color: var(--neon-green) !important; opacity: 0.7; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; color: var(--neon-green) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .nav-item:hover { color: var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+        .btn-outline-cyan { border-color: var(--neon-green) !important; color: var(--neon-green) !important; }
+        .btn-outline-cyan:hover { background: var(--neon-green) !important; color: #000 !important; box-shadow: 0 0 20px var(--neon-green) !important; }
+        @media (max-width: 768px) { .sidebar-fixed { border-bottom: 1px solid rgba(0, 255, 136, 0.2); } }
+
+        /* --- ESTILOS ESPECÍFICOS DE EVALUACIÓN --- */
+        .eval-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        .eval-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            transition: 0.3s;
+        }
+        .eval-card:hover { border-color: var(--neon-green); background: rgba(0, 255, 136, 0.02); }
+
+        .teacher-name { color: #fff; font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
+        .subject-name { color: var(--neon-green); font-family: 'JetBrains Mono'; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 20px; display: block; opacity: 0.8; }
+
+        /* Sistema de Estrellas (CSS Only) */
+        .rating-group { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin: 15px 0; }
+        .rating-group input { display: none; } /* Ocultamos los radio buttons */
+        .rating-group label { font-size: 1.5rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
+        
+        /* Al pasar el mouse o seleccionar, se iluminan */
+        .rating-group input:checked ~ label,
+        .rating-group label:hover,
+        .rating-group label:hover ~ label { color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); }
+
+        .comment-box {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 10px; border-radius: 8px; resize: none; font-family: 'Inter'; font-size: 0.8rem;
+            margin-top: 10px; height: 80px;
+        }
+        .comment-box:focus { outline: none; border-color: var(--neon-green); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info">
+                <span class="esime-name">ESIME CU</span>
+                <span class="system-v">SAES_CLOUD_V.26</span>
+            </div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+
+        <nav class="nav-container">
+            <!-- El menú se carga dinámicamente desde js/sidebar-loader.js -->
+        </nav>
+
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div style="display:flex; flex-direction:column;">
+                <span class="user-name" style="font-weight:bold; color:white;">S. Morales</span>
+                <span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span>
+            </div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Evaluación Docente</h1>
+                <p class="mono-sub">ENCUESTA_PERIODO_24/2 // ESTADO: PENDIENTE</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">CIERRE DE ACTAS:</span>
+                <span class="health-value" style="color: #ffcc00; text-shadow: none;">5 DÍAS</span>
+            </div>
+        </header>
+
+        <section class="eval-grid">
+            
+            <!-- Tarjeta Profesor 1 -->
+            <div class="eval-card">
+                <div class="teacher-name">ING. ROBERTO GÓMEZ</div>
+                <span class="subject-name">PROGRAMACIÓN ORIENTADA A OBJETOS</span>
+                
+                <p style="font-size: 0.75rem; color: #aaa;">Califica el desempeño:</p>
+                <div class="rating-group">
+                    <input type="radio" id="star5a" name="ratingA" value="5" /><label for="star5a">★</label>
+                    <input type="radio" id="star4a" name="ratingA" value="4" /><label for="star4a">★</label>
+                    <input type="radio" id="star3a" name="ratingA" value="3" /><label for="star3a">★</label>
+                    <input type="radio" id="star2a" name="ratingA" value="2" /><label for="star2a">★</label>
+                    <input type="radio" id="star1a" name="ratingA" value="1" /><label for="star1a">★</label>
+                </div>
+                <textarea class="comment-box" placeholder="Comentarios opcionales..."></textarea>
+                <button class="btn-outline-cyan">ENVIAR EVALUACIÓN</button>
+            </div>
+
+            <!-- Tarjeta Profesor 2 -->
+            <div class="eval-card">
+                <div class="teacher-name">DRA. ANA MARTÍNEZ</div>
+                <span class="subject-name">CÁLCULO VECTORIAL</span>
+                
+                <p style="font-size: 0.75rem; color: #aaa;">Califica el desempeño:</p>
+                <div class="rating-group">
+                    <input type="radio" id="star5b" name="ratingB" value="5" /><label for="star5b">★</label>
+                    <input type="radio" id="star4b" name="ratingB" value="4" /><label for="star4b">★</label>
+                    <input type="radio" id="star3b" name="ratingB" value="3" /><label for="star3b">★</label>
+                    <input type="radio" id="star2b" name="ratingB" value="2" /><label for="star2b">★</label>
+                    <input type="radio" id="star1b" name="ratingB" value="1" /><label for="star1b">★</label>
+                </div>
+                <textarea class="comment-box" placeholder="Comentarios opcionales..."></textarea>
+                <button class="btn-outline-cyan">ENVIAR EVALUACIÓN</button>
+            </div>
+
+        </section>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

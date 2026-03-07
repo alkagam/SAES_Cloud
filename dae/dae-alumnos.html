@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Gestión de Alumnos</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --dae-primary: #ff0055; --dae-dark: #2a0010; --text-gray: rgba(255, 255, 255, 0.6); }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        
+        /* Estilos específicos */
+        .search-bar { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,85,0.3); padding: 15px; border-radius: 8px; color: white; font-family: 'Inter'; margin-bottom: 20px; }
+        .search-bar:focus { outline: none; border-color: var(--dae-primary); box-shadow: 0 0 15px rgba(255,0,85,0.2); }
+        
+        .cyber-table th { color: var(--dae-primary); border-bottom: 1px solid rgba(255,0,85,0.3); }
+        .action-btn { background: transparent; border: 1px solid var(--dae-primary); color: var(--dae-primary); padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; margin-right: 5px; }
+        .action-btn:hover { background: var(--dae-primary); color: white; }
+        
+        .status-regular { color: #00ff88; }
+        .status-irregular { color: #ffcc00; }
+        .status-baja { color: #ff0055; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DAE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Gestión de Alumnos</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">BASE_DE_DATOS // CONSULTA_Y_EDICIÓN</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <input type="text" class="search-bar" placeholder="🔍 Buscar por Boleta, Nombre o CURP...">
+            
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>BOLETA</th>
+                            <th>NOMBRE</th>
+                            <th>CARRERA</th>
+                            <th>SEMESTRE</th>
+                            <th>ESTATUS</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-family: 'JetBrains Mono';">2022640001</td>
+                            <td>MORALES S. SAUL</td>
+                            <td>ING. COMPUTACIÓN</td>
+                            <td>4</td>
+                            <td class="status-regular">REGULAR</td>
+                            <td>
+                                <button class="action-btn">EDITAR</button>
+                                <button class="action-btn">KÁRDEX</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: 'JetBrains Mono';">2021350220</td>
+                            <td>GARCÍA P. ANA</td>
+                            <td>ING. MECÁNICA</td>
+                            <td>6</td>
+                            <td class="status-irregular">IRREGULAR (2)</td>
+                            <td>
+                                <button class="action-btn">EDITAR</button>
+                                <button class="action-btn">KÁRDEX</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: 'JetBrains Mono';">2023010555</td>
+                            <td>LOPEZ R. JUAN</td>
+                            <td>ING. COMPUTACIÓN</td>
+                            <td>2</td>
+                            <td class="status-baja">BAJA TEMP.</td>
+                            <td>
+                                <button class="action-btn">DETALLES</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">MOSTRANDO 3 DE 14,502 REGISTROS</span>
+                <button class="action-btn" style="background: var(--dae-primary); color: white;">+ NUEVO ALUMNO</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/dae-sidebar-loader.js"></script>
+</body>
+</html>

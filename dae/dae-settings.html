@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Configuración DAE</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --dae-primary: #ff0055; }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .setting-info h4 { margin: 0; font-size: 0.9rem; color: white; }
+        .setting-info p { margin: 5px 0 0; font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+        
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--dae-primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DAE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Configuración del Sistema</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">PARÁMETROS_GLOBALES // MANTENIMIENTO</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-header">CONTROL DE MÓDULOS</div>
+            
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>SISTEMA DE INSCRIPCIONES</h4>
+                    <p>Permitir a los alumnos acceder al módulo de reinscripción.</p>
+                </div>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>CAPTURA DE CALIFICACIONES</h4>
+                    <p>Habilitar portal de profesores para subir actas.</p>
+                </div>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h4>EVALUACIÓN DOCENTE</h4>
+                    <p>Activar encuestas obligatorias para alumnos.</p>
+                </div>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <div class="widget-header">CICLO ESCOLAR</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--dae-primary); display: block; margin-bottom: 5px;">PERIODO ACTUAL</label>
+                        <input type="text" value="2025-1" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--dae-primary); display: block; margin-bottom: 5px;">FECHA DE CIERRE</label>
+                        <input type="date" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
+                    </div>
+                </div>
+                <button class="btn-dae" style="margin-top: 20px; background: var(--dae-primary); color: white;">GUARDAR CAMBIOS</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/dae-sidebar-loader.js"></script>
+</body>
+</html>
