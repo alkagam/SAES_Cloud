@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Trayectoria Escolar</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --gestion-cyan: #00d4ff; }
+        
+        /* Buscador */
+        .search-container { display: flex; gap: 10px; margin-bottom: 30px; }
+        .search-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(0, 212, 255, 0.3); padding: 15px; border-radius: 8px; color: white; font-family: 'Inter'; }
+        .search-input:focus { outline: none; border-color: var(--gestion-cyan); box-shadow: 0 0 15px rgba(0, 212, 255, 0.2); }
+        .search-btn { background: var(--gestion-cyan); color: #000; border: none; padding: 0 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .search-btn:hover { box-shadow: 0 0 20px var(--gestion-cyan); }
+
+        /* Tarjeta de Alumno */
+        .student-summary { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; padding: 20px; background: rgba(0, 212, 255, 0.05); border-radius: 12px; border: 1px solid rgba(0, 212, 255, 0.2); }
+        .student-avatar { width: 60px; height: 60px; background: var(--gestion-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000; font-size: 1.5rem; }
+        .student-info h2 { margin: 0; font-size: 1.2rem; color: white; }
+        .student-info p { margin: 5px 0 0; font-size: 0.8rem; color: rgba(255,255,255,0.6); font-family: 'JetBrains Mono'; }
+
+        /* Línea de Tiempo / Trayectoria */
+        .trajectory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .semester-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; position: relative; }
+        .semester-title { font-size: 0.7rem; color: var(--gestion-cyan); font-weight: bold; margin-bottom: 10px; display: block; text-transform: uppercase; }
+        
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .passed { background: #00ff88; box-shadow: 0 0 5px #00ff88; }
+        .failed { background: #ff0055; box-shadow: 0 0 5px #ff0055; }
+        .current { background: #00d4ff; box-shadow: 0 0 5px #00d4ff; }
+
+        .subject-mini { font-size: 0.65rem; margin-bottom: 5px; display: flex; align-items: center; color: rgba(255,255,255,0.8); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">GES<span style="color: #00d4ff;">.ESC</span></span>
+            <div class="school-info"><span class="esime-name">OPERACIONES</span><span class="system-v" style="color:#00d4ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot" style="background: #00d4ff; box-shadow: 0 0 10px #00d4ff;"></span>
+            <div><span style="font-weight:bold; color:white;">OPERADOR 1</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">GESTIÓN ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Trayectoria Escolar</h1>
+                <p class="mono-sub" style="color: #00d4ff !important;">ANÁLISIS_INDIVIDUAL // HISTORIAL</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Ingrese Boleta o Nombre del Alumno...">
+                <button class="search-btn">BUSCAR</button>
+            </div>
+
+            <!-- Resultado de Búsqueda (Simulado) -->
+            <div class="student-summary">
+                <div class="student-avatar">SM</div>
+                <div class="student-info">
+                    <h2>MORALES S. SAUL</h2>
+                    <p>BOLETA: 2022640001 • ING. EN COMPUTACIÓN • PROMEDIO: 8.75</p>
+                    <p style="color: #00ff88; margin-top: 5px;">ESTATUS: REGULAR</p>
+                </div>
+            </div>
+
+            <div class="widget-head" style="color: #00d4ff; border-bottom: 1px solid rgba(0,212,255,0.2);">MAPA DE AVANCE</div>
+            
+            <div class="trajectory-grid">
+                <div class="semester-card">
+                    <span class="semester-title">SEMESTRE 1</span>
+                    <div class="subject-mini"><span class="status-dot passed"></span>Cálculo Dif.</div>
+                    <div class="subject-mini"><span class="status-dot passed"></span>Álgebra Lineal</div>
+                    <div class="subject-mini"><span class="status-dot passed"></span>Física Clásica</div>
+                </div>
+                <div class="semester-card">
+                    <span class="semester-title">SEMESTRE 2</span>
+                    <div class="subject-mini"><span class="status-dot passed"></span>Cálculo Vec.</div>
+                    <div class="subject-mini"><span class="status-dot passed"></span>Electricidad</div>
+                    <div class="subject-mini"><span class="status-dot passed"></span>POO</div>
+                </div>
+                <div class="semester-card" style="border-color: #00d4ff; background: rgba(0, 212, 255, 0.05);">
+                    <span class="semester-title">SEMESTRE 3 (ACTUAL)</span>
+                    <div class="subject-mini"><span class="status-dot current"></span>Ecuaciones Dif.</div>
+                    <div class="subject-mini"><span class="status-dot current"></span>Estructura Datos</div>
+                    <div class="subject-mini"><span class="status-dot current"></span>Circuitos</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion-sidebar-loader.js"></script>
+</body>
+</html>

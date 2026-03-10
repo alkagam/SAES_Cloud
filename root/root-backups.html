@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | Backups</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --root-green: #00ff00; }
+        .backup-item {
+            background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .backup-name { font-family: 'JetBrains Mono'; color: white; font-size: 0.85rem; }
+        .backup-meta { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+        .btn-action {
+            background: transparent; border: 1px solid var(--root-green); color: var(--root-green);
+            padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; margin-left: 10px;
+        }
+        .btn-action:hover { background: var(--root-green); color: black; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">ROOT<span style="color: white;">.SYS</span></span>
+            <div class="school-info"><span class="esime-name">INFRAESTRUCTURA</span><span class="system-v">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ROOT</span><span style="font-size:0.6rem; color:rgba(0,255,0,0.7);">SYSTEM ADMIN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">LOGOUT_</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Database Backups</h1>
+                <p class="mono-sub" style="color: var(--root-green) !important;">DISASTER_RECOVERY // SNAPSHOTS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div style="margin-bottom: 20px; text-align: right;">
+                <button class="btn-action" style="padding: 10px 20px;">+ CREATE NEW SNAPSHOT</button>
+            </div>
+            
+            <div class="backup-list">
+                <div class="backup-item">
+                    <div><div class="backup-name">full_backup_20240820.sql.gz</div><div class="backup-meta">Size: 2.4 GB • Created: Today 03:00 AM</div></div>
+                    <div><button class="btn-action">DOWNLOAD</button><button class="btn-action" style="border-color:#ff0055; color:#ff0055;">RESTORE</button></div>
+                </div>
+                <div class="backup-item">
+                    <div><div class="backup-name">full_backup_20240819.sql.gz</div><div class="backup-meta">Size: 2.3 GB • Created: Yesterday 03:00 AM</div></div>
+                    <div><button class="btn-action">DOWNLOAD</button><button class="btn-action" style="border-color:#ff0055; color:#ff0055;">RESTORE</button></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/root-sidebar-loader.js"></script>
+</body>
+</html>

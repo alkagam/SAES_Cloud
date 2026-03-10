@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Asignación de Salones</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --gestion-cyan: #00d4ff; }
+        
+        .filters { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
+        .select-control { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,212,255,0.3); color: white; border-radius: 6px; }
+
+        .schedule-grid { display: grid; grid-template-columns: 80px 1fr; gap: 5px; margin-top: 20px; overflow-x: auto; }
+        .time-slot { text-align: right; padding: 10px; color: rgba(255,255,255,0.5); font-size: 0.7rem; }
+        .day-schedule { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+        .day-header { text-align: center; color: var(--gestion-cyan); font-weight: bold; padding: 10px; background: rgba(0, 212, 255, 0.1); border-radius: 4px; font-size: 0.8rem; }
+        
+        .class-block, .free-slot {
+            border-radius: 4px; padding: 5px; font-size: 0.65rem; color: white;
+            display: flex; flex-direction: column; justify-content: center; text-align: center;
+            min-height: 50px; transition: 0.3s;
+        }
+        .class-block { background: rgba(255, 0, 85, 0.2); border: 1px solid #ff0055; }
+        .free-slot { 
+            background: rgba(0, 255, 136, 0.05); 
+            border: 1px dashed rgba(0, 255, 136, 0.2); 
+            cursor: pointer;
+        }
+        .free-slot:hover { background: rgba(0, 255, 136, 0.1); border-style: solid; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">GES<span style="color: #00d4ff;">.ESC</span></span>
+            <div class="school-info"><span class="esime-name">OPERACIONES</span><span class="system-v" style="color:#00d4ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot" style="background: #00d4ff; box-shadow: 0 0 10px #00d4ff;"></span>
+            <div><span style="font-weight:bold; color:white;">OPERADOR 1</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">GESTIÓN ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Asignación de Salones</h1>
+                <p class="mono-sub" style="color: #00d4ff !important;">CONSULTA_Y_ASIGNACIÓN_DE_ESPACIOS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="filters">
+                <div style="flex:1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.7rem; color: var(--gestion-cyan); margin-bottom: 5px;">EDIFICIO</label>
+                    <select class="select-control">
+                        <option>Edificio 1</option>
+                        <option>Edificio 2 (Laboratorios)</option>
+                    </select>
+                </div>
+                <div style="flex:1; min-width: 200px;">
+                    <label style="display: block; font-size: 0.7rem; color: var(--gestion-cyan); margin-bottom: 5px;">SALÓN</label>
+                    <select class="select-control">
+                        <option>Salón 1101</option>
+                        <option>Salón 1102</option>
+                        <option>Laboratorio de Cómputo 3</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="widget-head" style="color: var(--gestion-cyan);">HORARIO DEL SALÓN: 1101</div>
+            
+            <div class="schedule-grid">
+                <!-- Headers -->
+                <div></div>
+                <div class="day-schedule">
+                    <div class="day-header">LUN</div><div class="day-header">MAR</div><div class="day-header">MIE</div><div class="day-header">JUE</div><div class="day-header">VIE</div>
+                </div>
+
+                <!-- 7:00 -->
+                <div class="time-slot">07:00</div>
+                <div class="day-schedule">
+                    <div class="class-block">2CV2 - Calc</div><div class="free-slot">Libre</div><div class="class-block">2CV2 - Calc</div><div class="free-slot">Libre</div><div class="class-block">2CV2 - Calc</div>
+                </div>
+
+                <!-- 8:30 -->
+                <div class="time-slot">08:30</div>
+                <div class="day-schedule">
+                    <div class="free-slot">Libre</div><div class="class-block">1CM5 - Física</div><div class="free-slot">Libre</div><div class="class-block">1CM5 - Física</div><div class="free-slot">Libre</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion-sidebar-loader.js"></script>
+</body>
+</html>

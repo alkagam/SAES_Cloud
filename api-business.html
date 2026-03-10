@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAES Cloud — Business APIs</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e1117;--s1:#141923;--s2:#1a2030;--line:#1e2840;
+  --text:#c8d3e0;--dim:#4e5e72;
+  --blue:#7cb9f4;--green:#6ee7b7;--amber:#fcd34d;--red:#fca5a5;--purple:#c4b5fd;
+}
+body{font:13px/1.55 'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+nav{width:180px;min-width:180px;background:var(--s1);border-right:1px solid var(--line);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:0 14px 14px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line);margin-bottom:8px}
+.nav-grp{padding:10px 14px 4px;font-size:10px;color:var(--dim);letter-spacing:.07em;text-transform:uppercase}
+nav a{display:block;padding:5px 14px;color:var(--dim);font-size:11px;font-family:monospace;border-left:2px solid transparent;text-decoration:none;transition:all .12s}
+nav a:hover,nav a.active{color:var(--text);border-left-color:var(--blue);background:var(--s2)}
+main{flex:1;padding:36px 52px;max-width:900px}
+h1{font-size:20px;font-weight:600}
+.subtitle{color:var(--dim);font-size:12px;margin:4px 0 24px}
+.global-note{background:var(--s1);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:40px}
+.global-note code{font-family:monospace;color:var(--blue)}
+.svc{margin-bottom:52px}
+.svc-name{font:600 17px/1 'Cascadia Code','Fira Code',monospace;margin-bottom:5px}
+.svc-desc{font-size:12px;color:var(--dim);max-width:680px;line-height:1.6;margin-bottom:14px}
+.svc-desc code{font-family:monospace;color:var(--blue)}
+hr.svc-line{border:none;border-top:1px solid var(--line);margin-bottom:10px}
+.grp{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
+.ep{border:1px solid var(--line);border-radius:6px;margin-bottom:5px;overflow:hidden}
+.ep:hover{border-color:#28304a}
+.ep-head{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.ep-head .path{font:13px 'Cascadia Code',monospace;flex-shrink:0}
+.ep-head .path .p{color:var(--dim)}
+.ep-head .desc{font-size:12px;color:var(--dim);flex:1}
+.ep-head .tags{display:flex;gap:4px;flex-shrink:0}
+.tag{font-size:10px;padding:1px 6px;border-radius:3px;background:var(--s2);color:var(--dim);border:1px solid var(--line)}
+.tag.perm{color:#a5b4fc;border-color:#2e3362;background:#141632;font-family:monospace;font-size:9px}
+.m{font:700 10px/1 'Cascadia Code',monospace;padding:2px 7px;border-radius:3px;letter-spacing:.04em;flex-shrink:0}
+.GET{color:var(--green);background:#052e1a}
+.POST{color:#60a5fa;background:#061a33}
+.PUT{color:var(--amber);background:#1c1204}
+.DELETE{color:var(--red);background:#1c0808}
+details summary{padding:6px 12px;font-size:11px;color:var(--dim);cursor:pointer;user-select:none;list-style:none;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px;background:var(--bg)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{background:var(--s1)}
+details summary:hover{color:var(--text)}
+.arr{font-size:9px;transition:transform .15s}
+details[open] .arr{transform:rotate(90deg)}
+.ep-body{background:var(--s1);padding:10px 12px 14px;display:flex;flex-direction:column;gap:10px}
+.sl{display:block;font:700 10px/1 monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.sl.in::before{content:'→ ';color:var(--blue)}
+.sl.out::before{content:'← ';color:var(--green)}
+.row{display:grid;grid-template-columns:185px 80px 40px 1fr;gap:8px;align-items:baseline;padding:3px 6px;border-radius:3px;font-size:12px}
+.row:hover{background:var(--s2)}
+.rn{font-family:'Cascadia Code',monospace;color:var(--blue);font-size:11px}
+.rt{font-family:monospace;color:var(--green);font-size:10px}
+.rr{font-size:10px}
+.req{color:var(--red)}
+.opt{color:var(--dim)}
+.out{color:var(--dim);font-style:italic;font-size:9px}
+.rd{color:var(--dim);line-height:1.4}
+.rd code{font-family:monospace;color:var(--amber);font-size:10px}
+.note{font-size:11px;color:var(--dim);font-style:italic;padding:2px 6px}
+.note code{font-family:monospace;color:var(--blue)}
+.warn{font-size:11px;color:#f59e0b;padding:4px 8px;background:#1c1204;border-radius:3px;border-left:2px solid #f59e0b}
+.warn code{font-family:monospace;color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="brand">SAES Cloud</div>
+  <div class="nav-grp">Business APIs</div>
+  <a href="#api-catalog">api-catalog</a>
+  <a href="#api-schedule">api-schedule</a>
+  <a href="#api-enrollments">api-enrollments</a>
+  <a href="#api-grades">api-grades</a>
+</nav>
+<main>
+  <h1>Business APIs</h1>
+  <p class="subtitle">SAES Cloud · api-catalog · api-schedule · api-enrollments · api-grades</p>
+  <div class="global-note">
+    Todos los endpoints requieren <code>Authorization: Bearer {access_token}</code>.<br>
+    Cada servicio valida el token vía <code>api-auth /internal/tokens/validate</code> y el permiso vía <code>api-permissions /internal/verify</code> antes de ejecutar cualquier operación sensible.
+  </div>
+
+  <!-- api-catalog -->
+  <div class="svc" id="api-catalog">
+    <div class="svc-name">api-catalog</div>
+    <p class="svc-desc">Fuente de verdad del catálogo institucional. Administrado por DAE. Gestiona carreras, planes de estudio, materias y academias — entidades que existen independientemente de un período académico.</p>
+    <hr class="svc-line">
+
+    <div class="grp">Carreras</div>
+
+    <!-- POST /careers -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/careers</span>
+        <span class="desc">Crear carrera.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Authorization</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>Bearer {access_token}</code></span></div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Clave corta única, e.g. <code>ICOM</code>, <code>IMEC</code></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">duracion_semestres</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">duracion_semestres</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">activa</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd">Siempre <code>true</code> en la creación</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/careers/{id_carrera}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /careers -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/careers</span>
+        <span class="desc">Listar carreras.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">activa</span><span class="rt">boolean</span><span class="rr opt">opt</span><span class="rd">Default: <code>true</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Array de carreras</span></div>
+          <div class="row"><span class="rn">  [].id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].activa</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /careers/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/careers/<span class="p">{id}</span></span>
+        <span class="desc">Obtener carrera por id_carrera.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_carrera</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">duracion_semestres</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">activa</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /careers/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/careers/<span class="p">{id}</span></span>
+        <span class="desc">Eliminar carrera.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_carrera</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /careers/{id}/curriculum -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/careers/<span class="p">{id}</span>/curriculum</span>
+        <span class="desc">Mapa curricular: materias organizadas por semestre, con seriación y tipo.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_carrera</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">semestres</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Un elemento por semestre del plan</span></div>
+          <div class="row"><span class="rn">  [].num</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Número de semestre</span></div>
+          <div class="row"><span class="rn">  [].materias</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Materias del semestre con <code>id_materia</code>, <code>clave</code>, <code>nombre</code>, <code>creditos</code>, <code>tipo</code>, <code>id_seriacion</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Planes de estudio</div>
+
+    <!-- POST /plans -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/plans</span>
+        <span class="desc">Crear plan de estudios.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave_plan</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">e.g. <code>2009</code>, <code>2020</code></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">total_creditos</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">total_semestres</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_plan</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave_plan</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/plans/{id_plan}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /plans/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/plans/<span class="p">{id}</span></span>
+        <span class="desc">Obtener plan de estudios.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_plan</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_plan</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave_plan</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">total_creditos</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">total_semestres</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /plans/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/plans/<span class="p">{id}</span></span>
+        <span class="desc">Eliminar plan de estudios.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_plan</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Materias</div>
+
+    <!-- POST /subjects -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/subjects</span>
+        <span class="desc">Crear materia. Independiente del plan; su posición en cada plan vive en MapaCurricular.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag perm">crear_materia</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Clave única de la materia</span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">creditos</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">horas_teoria</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">horas_practica</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">creditos</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/subjects/{id_materia}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /subjects -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/subjects</span>
+        <span class="desc">Listar materias con paginación.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>1</code></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>50</code></span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd">Búsqueda exacta por clave</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">data</span><span class="rt">object[]</span><span class="rr out">—</span><span class="rd">Ver estructura en <code>GET /subjects/{id}</code></span></div>
+          <div class="row"><span class="rn">total</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /subjects/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/subjects/<span class="p">{id}</span></span>
+        <span class="desc">Obtener materia.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_materia</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">creditos</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">horas_teoria</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">horas_practica</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /subjects/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/subjects/<span class="p">{id}</span></span>
+        <span class="desc">Eliminar materia.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_materia</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Academias</div>
+
+    <!-- POST /academies -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/academies</span>
+        <span class="desc">Crear academia.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_jefe</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">id_docente del jefe de academia</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/academies/{id_academia}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /academies -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/academies</span>
+        <span class="desc">Listar academias.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Array de academias con <code>id_academia</code>, <code>nombre</code>, <code>id_carrera</code>, <code>id_jefe</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /academies/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/academies/<span class="p">{id}</span></span>
+        <span class="desc">Obtener academia.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_academia</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_jefe</span><span class="rt">int|null</span><span class="rr out">—</span><span class="rd">id_docente del jefe de academia</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /academies/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/academies/<span class="p">{id}</span></span>
+        <span class="desc">Eliminar academia.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_academia</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+  <!-- api-schedule -->
+  <div class="svc" id="api-schedule">
+    <div class="svc-name">api-schedule</div>
+    <p class="svc-desc">Estructura operativa de cada semestre. Administrado por Gestión Escolar. Controla períodos académicos, grupos, horarios y asignaciones de docentes.</p>
+    <hr class="svc-line">
+
+    <div class="grp">Períodos</div>
+
+    <!-- POST /periods -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/periods</span>
+        <span class="desc">Crear período académico.</span>
+        <div class="tags"><span class="tag">Gestión</span><span class="tag perm">iniciar_semestre</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">e.g. <code>2025-1</code>, <code>2025-2</code></span></div>
+          <div class="row"><span class="rn">fecha_inicio</span><span class="rt">date</span><span class="rr req">req</span><span class="rd"><code>YYYY-MM-DD</code></span></div>
+          <div class="row"><span class="rn">fecha_fin</span><span class="rt">date</span><span class="rr req">req</span><span class="rd"><code>YYYY-MM-DD</code></span></div>
+          <div class="row"><span class="rn">tipo</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Ordinario</code> | <code>Especial</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Proximo</code> al crear</span></div>
+          <div class="row"><span class="rn">fecha_inicio</span><span class="rt">date</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_fin</span><span class="rt">date</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/periods/{id_periodo}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /periods -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/periods</span>
+        <span class="desc">Listar períodos.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Proximo</code> | <code>Activo</code> | <code>Cerrado</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Períodos con <code>id_periodo</code>, <code>clave</code>, <code>estado</code>, <code>fecha_inicio</code>, <code>fecha_fin</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /periods/active -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/periods/active</span>
+        <span class="desc">Obtener el período activo actual. 404 si no hay ninguno.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>Activo</code></span></div>
+          <div class="row"><span class="rn">fecha_inicio</span><span class="rt">date</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_fin</span><span class="rt">date</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /periods/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/periods/<span class="p">{id}</span></span>
+        <span class="desc">Obtener período por id.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_periodo</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <p class="note">Misma estructura que <code>GET /periods/active</code>.</p>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Grupos</div>
+
+    <!-- POST /groups -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/groups</span>
+        <span class="desc">Crear grupo para un período.</span>
+        <div class="tags"><span class="tag">Gestión</span><span class="tag perm">crear_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Validado contra api-catalog</span></div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Debe estar en estado <code>Proximo</code> o <code>Activo</code></span></div>
+          <div class="row"><span class="rn">clave_grupo</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">e.g. <code>3CM1</code></span></div>
+          <div class="row"><span class="rn">cupo_max</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">clave_grupo</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">cupo_max</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/groups/{id_grupo}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /groups -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/groups</span>
+        <span class="desc">Listar grupos con filtros.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>1</code></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>50</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">data</span><span class="rt">object[]</span><span class="rr out">—</span><span class="rd">Ver estructura en <code>GET /groups/{id}</code></span></div>
+          <div class="row"><span class="rn">total</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /groups/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/groups/<span class="p">{id}</span></span>
+        <span class="desc">Obtener grupo con docente asignado e inscritos calculados.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_grupo</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">clave_grupo</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_materia</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">cupo_max</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">inscritos</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">COUNT sobre Inscripcion con estado <code>Activa</code></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">docente</span><span class="rt">object|null</span><span class="rr out">—</span><span class="rd"><code>id_docente</code>, <code>nombre</code>, <code>num_empleado</code>. Null si no asignado.</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- PUT /groups/{id}/teacher -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/groups/<span class="p">{id}</span>/teacher</span>
+        <span class="desc">Asignar o reasignar docente a un grupo.</span>
+        <div class="tags"><span class="tag">Gestión</span><span class="tag perm">asignar_docente_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_grupo</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_docente</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Validado contra api-users</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_docente</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_asignacion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK del registro AsignacionDocente creado</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Horarios</div>
+
+    <!-- POST /groups/{id}/schedules -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/groups/<span class="p">{id}</span>/schedules</span>
+        <span class="desc">Agregar franja horaria a un grupo.</span>
+        <div class="tags"><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_grupo</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">dia</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Lunes</code> | <code>Martes</code> | <code>Miercoles</code> | <code>Jueves</code> | <code>Viernes</code> | <code>Sabado</code></span></div>
+          <div class="row"><span class="rn">hora_inicio</span><span class="rt">time</span><span class="rr req">req</span><span class="rd">Formato <code>HH:MM</code></span></div>
+          <div class="row"><span class="rn">hora_fin</span><span class="rt">time</span><span class="rr req">req</span><span class="rd">Formato <code>HH:MM</code></span></div>
+          <div class="row"><span class="rn">aula_desc</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">e.g. <code>D-401</code>, <code>Lab-3</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_horario</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">dia</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">hora_inicio</span><span class="rt">time</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">hora_fin</span><span class="rt">time</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">aula_desc</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /groups/{id}/schedules -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/groups/<span class="p">{id}</span>/schedules</span>
+        <span class="desc">Listar franjas horarias del grupo.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_grupo</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Franjas con <code>id_horario</code>, <code>dia</code>, <code>hora_inicio</code>, <code>hora_fin</code>, <code>aula_desc</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /schedules/conflicts -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/schedules/conflicts</span>
+        <span class="desc">Detectar conflictos de horario entre grupos de un período.</span>
+        <div class="tags"><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Conflictos detectados. Array vacío si no hay.</span></div>
+          <div class="row"><span class="rn">  [].id_grupo_a</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].id_grupo_b</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].dia</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].hora_inicio</span><span class="rt">time</span><span class="rr out">—</span><span class="rd">Inicio del traslape</span></div>
+          <div class="row"><span class="rn">  [].hora_fin</span><span class="rt">time</span><span class="rr out">—</span><span class="rd">Fin del traslape</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Aulas</div>
+
+    <!-- GET /classrooms -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/classrooms</span>
+        <span class="desc">Listar aulas registradas.</span>
+        <div class="tags"><span class="tag">Todos</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Aulas con <code>aula_desc</code>, <code>capacidad</code>, <code>tipo</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /classrooms/availability -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/classrooms/availability</span>
+        <span class="desc">Consultar disponibilidad de aulas en una franja horaria.</span>
+        <div class="tags"><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">dia</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Lunes</code> | <code>Martes</code> | <code>Miercoles</code> | <code>Jueves</code> | <code>Viernes</code> | <code>Sabado</code></span></div>
+          <div class="row"><span class="rn">hora_inicio</span><span class="rt">time</span><span class="rr req">req</span><span class="rd">Formato <code>HH:MM</code></span></div>
+          <div class="row"><span class="rn">hora_fin</span><span class="rt">time</span><span class="rr req">req</span><span class="rd">Formato <code>HH:MM</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Todas las aulas con flag de disponibilidad</span></div>
+          <div class="row"><span class="rn">  [].aula_desc</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].disponible</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"><code>true</code> si no hay grupo asignado en esa franja</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+  <!-- api-enrollments -->
+  <div class="svc" id="api-enrollments">
+    <div class="svc-name">api-enrollments</div>
+    <p class="svc-desc">Inscripción y baja de alumnos en grupos. Valida cupo, conflictos de horario y situación escolar antes de confirmar. La baja está restringida si el período ya está Activo o si el alumno congeló su selección.</p>
+    <hr class="svc-line">
+
+    <!-- GET /groups/available -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/groups/available</span>
+        <span class="desc">Grupos disponibles para el alumno en el período activo. Marca conflictos con su horario ya inscrito.</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag perm">ver_grupos_disponibles</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">period</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Clave del período, e.g. <code>2025-1</code></span></div>
+          <div class="row"><span class="rn">student</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_alumno</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Grupos disponibles del período</span></div>
+          <div class="row"><span class="rn">  [].id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].clave_grupo</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].materia</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Nombre de la materia</span></div>
+          <div class="row"><span class="rn">  [].cupo_disponible</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">cupo_max − inscritos actuales</span></div>
+          <div class="row"><span class="rn">  [].conflicto_horario</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"><code>true</code> si traslapa con un grupo ya inscrito del alumno</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- POST /enrollments -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/enrollments</span>
+        <span class="desc">Inscribirse a un grupo. Verifica cupo, conflicto de horario y situación escolar del alumno.</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag perm">inscribir_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">tipo</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Ordinaria</code> | <code>Reinscripcion</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_inscripcion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Activa</code></span></div>
+          <div class="row"><span class="rn">tipo</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha</span><span class="rt">datetime</span><span class="rr out">—</span><span class="rd">Timestamp de la inscripción</span></div>
+          <div class="row"><span class="rn">fecha_cierre_seleccion</span><span class="rt">null</span><span class="rr out">—</span><span class="rd">Siempre <code>null</code> al inscribirse</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/enrollments/{id_inscripcion}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /enrollments -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/enrollments</span>
+        <span class="desc">Listar inscripciones con filtros.</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag">Docente</span><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Activa</code> | <code>Baja</code> | <code>Rechazada</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">data</span><span class="rt">object[]</span><span class="rr out">—</span><span class="rd">Ver estructura en <code>GET /enrollments/{id}</code></span></div>
+          <div class="row"><span class="rn">total</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /enrollments/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/enrollments/<span class="p">{id}</span></span>
+        <span class="desc">Obtener inscripción.</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag">Docente</span><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_inscripcion</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_inscripcion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Activa</code> | <code>Baja</code> | <code>Rechazada</code></span></div>
+          <div class="row"><span class="rn">tipo</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Ordinaria</code> | <code>Reinscripcion</code></span></div>
+          <div class="row"><span class="rn">fecha</span><span class="rt">datetime</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_cierre_seleccion</span><span class="rt">datetime|null</span><span class="rr out">—</span><span class="rd">Null hasta que el alumno ejecute <code>POST /enrollments/confirm</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /enrollments/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/enrollments/<span class="p">{id}</span></span>
+        <span class="desc">Darse de baja de un grupo. Cambia estado a Baja.</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag perm">baja_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_inscripcion</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo si la baja procede.</p>
+        </div>
+        <div>
+          <div class="sl out">BODY 403</div>
+          <p class="warn">Devuelve <code>403</code> si se cumple <strong>cualquiera</strong> de estas condiciones:<br>
+          · <code>PeriodoAcademico.estado = 'Activo'</code> — el semestre ya arrancó.<br>
+          · <code>fecha_cierre_seleccion IS NOT NULL</code> — el alumno ya ejecutó <code>POST /enrollments/confirm</code>.</p>
+          <div class="row"><span class="rn">error</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Descripción de la condición que bloquea la baja</span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- POST /enrollments/confirm -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/enrollments/confirm</span>
+        <span class="desc">Congelar selección de horario. Establece fecha_cierre_seleccion = NOW() en todas las inscripciones activas del alumno en el período actual. Operación irreversible.</span>
+        <div class="tags"><span class="tag">Alumno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Authorization</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>Bearer {access_token}</code> — la identidad del alumno se extrae del token</span></div>
+          <p class="note">Sin body. El alumno se identifica por el token; el período activo se determina automáticamente.</p>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">confirmadas</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Número de inscripciones congeladas</span></div>
+          <div class="row"><span class="rn">fecha_cierre_seleccion</span><span class="rt">datetime</span><span class="rr out">—</span><span class="rd">ISO 8601 — timestamp exacto del cierre</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- PUT /enrollments/{id}/group -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/enrollments/<span class="p">{id}</span>/group</span>
+        <span class="desc">Reubicar alumno a otro grupo (Gestión Escolar).</span>
+        <div class="tags"><span class="tag">Gestión</span><span class="tag perm">cambiar_alumno_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_inscripcion</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_grupo</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Grupo destino. Debe tener cupo disponible.</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_inscripcion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_grupo_anterior</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_grupo_nuevo</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">estado</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Activa</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+  <!-- api-grades -->
+  <div class="svc" id="api-grades">
+    <div class="svc-name">api-grades</div>
+    <p class="svc-desc">Captura y consulta de calificaciones. Verifica que el docente sea el asignado al grupo antes de permitir escritura. <code>definitiva</code> y <code>acreditada</code> son columnas GENERATED en MariaDB — el motor las calcula automáticamente.</p>
+    <hr class="svc-line">
+
+    <!-- PUT /grades/{enrollmentId} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/grades/<span class="p">{enrollmentId}</span></span>
+        <span class="desc">Capturar o actualizar calificaciones. Enviar solo los campos a registrar; los omitidos no se modifican.</span>
+        <div class="tags"><span class="tag">Docente</span><span class="tag perm">registrar_calificacion</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">enrollmentId</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_inscripcion</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <p class="note">Al menos un campo requerido.</p>
+          <div class="row"><span class="rn">parcial_1</span><span class="rt">decimal</span><span class="rr opt">opt</span><span class="rd">0.0 – 10.0</span></div>
+          <div class="row"><span class="rn">parcial_2</span><span class="rt">decimal</span><span class="rr opt">opt</span><span class="rd">0.0 – 10.0</span></div>
+          <div class="row"><span class="rn">parcial_3</span><span class="rt">decimal</span><span class="rr opt">opt</span><span class="rd">0.0 – 10.0</span></div>
+          <p class="note"><code>calificacion_ets</code> existe en BD pero no se expone en el MVP.</p>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_calificacion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK del registro</span></div>
+          <div class="row"><span class="rn">id_inscripcion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">parcial_1</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">parcial_2</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">parcial_3</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">definitiva</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd">Calculada por MariaDB. Null hasta tener los 3 parciales.</span></div>
+          <div class="row"><span class="rn">acreditada</span><span class="rt">bool|null</span><span class="rr out">—</span><span class="rd">Calculada por MariaDB. <code>true</code> si definitiva ≥ 6.0</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /grades/students/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/grades/students/<span class="p">{id}</span></span>
+        <span class="desc">Calificaciones del alumno en todos los períodos (o filtrado por período).</span>
+        <div class="tags"><span class="tag">Alumno</span><span class="tag perm">ver_calificaciones_propias</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_alumno</span></div>
+        </div>
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">id_periodo</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Filtrar por período. Sin filtro retorna todos.</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Una entrada por inscripción</span></div>
+          <div class="row"><span class="rn">  [].id_inscripcion</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].materia</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Nombre de la materia</span></div>
+          <div class="row"><span class="rn">  [].grupo</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Clave del grupo</span></div>
+          <div class="row"><span class="rn">  [].parcial_1</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].parcial_2</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].parcial_3</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].definitiva</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd">GENERATED</span></div>
+          <div class="row"><span class="rn">  [].acreditada</span><span class="rt">bool|null</span><span class="rr out">—</span><span class="rd">GENERATED</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /grades/groups/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/grades/groups/<span class="p">{id}</span></span>
+        <span class="desc">Calificaciones de todos los alumnos del grupo. Solo para el docente asignado.</span>
+        <div class="tags"><span class="tag">Docente</span><span class="tag perm">ver_alumnos_grupo</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_grupo</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Un elemento por alumno inscrito</span></div>
+          <div class="row"><span class="rn">  [].id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].boleta</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Nombre completo del alumno</span></div>
+          <div class="row"><span class="rn">  [].parcial_1</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].parcial_2</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].parcial_3</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">  [].definitiva</span><span class="rt">decimal|null</span><span class="rr out">—</span><span class="rd">GENERATED</span></div>
+          <div class="row"><span class="rn">  [].acreditada</span><span class="rt">bool|null</span><span class="rr out">—</span><span class="rd">GENERATED</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+</main>
+</div>
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.svc').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

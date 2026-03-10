@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Dictámenes</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --dae-primary: #ff0055; }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        
+        .request-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .request-info h3 { margin: 0; font-size: 0.9rem; color: white; }
+        .request-info p { margin: 5px 0 0; font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .priority-high { border-left: 3px solid #ff0055; }
+        .priority-med { border-left: 3px solid #ffcc00; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DAE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Dictámenes COSIE</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">COMISIÓN_DE_SITUACIÓN_ESCOLAR</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-header">SOLICITUDES PENDIENTES</div>
+            
+            <div class="request-card priority-high">
+                <div class="request-info">
+                    <h3>AMPLIACIÓN DE TIEMPO MÁXIMO</h3>
+                    <p>Boleta: 2018300123 • Alumno: Pérez J. • Motivo: Salud</p>
+                </div>
+                <div>
+                    <button class="btn-dae">VER EXPEDIENTE</button>
+                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
+                </div>
+            </div>
+
+            <div class="request-card priority-med">
+                <div class="request-info">
+                    <h3>CAMBIO DE CARRERA INTERNO</h3>
+                    <p>Boleta: 2022640555 • Alumno: Ruiz M. • Promedio: 8.9</p>
+                </div>
+                <div>
+                    <button class="btn-dae">VER EXPEDIENTE</button>
+                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
+                </div>
+            </div>
+
+            <div class="request-card">
+                <div class="request-info">
+                    <h3>RECURSE DE MATERIA (3RA OPORTUNIDAD)</h3>
+                    <p>Boleta: 2021000999 • Alumno: Diaz L. • Materia: Ecuaciones Dif.</p>
+                </div>
+                <div>
+                    <button class="btn-dae">VER EXPEDIENTE</button>
+                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script src="../js/dae-sidebar-loader.js"></script>
+</body>
+</html>

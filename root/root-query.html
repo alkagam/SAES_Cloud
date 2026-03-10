@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT | Query</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --root-green: #00ff00; }
+        .sql-editor {
+            width: 100%; height: 150px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+            color: var(--root-green); font-family: 'JetBrains Mono'; padding: 15px; border-radius: 6px;
+            resize: vertical; outline: none;
+        }
+        .sql-editor:focus { border-color: var(--root-green); }
+        .cyber-table th { color: var(--root-green); border-bottom: 1px solid rgba(0, 255, 0, 0.3); }
+        .btn-run {
+            background: var(--root-green); color: black; border: none; padding: 10px 20px;
+            font-weight: bold; cursor: pointer; border-radius: 4px; margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">ROOT<span style="color: white;">.SYS</span></span>
+            <div class="school-info"><span class="esime-name">INFRAESTRUCTURA</span><span class="system-v">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ROOT</span><span style="font-size:0.6rem; color:rgba(0,255,0,0.7);">SYSTEM ADMIN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">LOGOUT_</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Query Analyzer</h1>
+                <p class="mono-sub" style="color: var(--root-green) !important;">DIRECT_DB_ACCESS // READ_ONLY_MODE</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <textarea class="sql-editor" placeholder="SELECT * FROM users WHERE role = 'admin';"></textarea>
+            <div style="text-align: right;"><button class="btn-run">EXECUTE QUERY</button></div>
+            
+            <div class="table-responsive" style="margin-top: 30px;">
+                <div class="widget-head" style="color: var(--root-green);">RESULTS</div>
+                <table class="cyber-table">
+                    <thead>
+                        <tr><th>ID</th><th>USERNAME</th><th>ROLE</th><th>LAST_LOGIN</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>root</td><td>super_admin</td><td>2024-08-20 10:42:05</td></tr>
+                        <tr><td>2</td><td>dae_master</td><td>admin_dae</td><td>2024-08-20 09:15:00</td></tr>
+                        <tr><td>3</td><td>coord_acad</td><td>admin_acad</td><td>2024-08-19 14:20:11</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/root-sidebar-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Deportes</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --sub-orange: #ffaa00; }
+        .sport-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,170,0,0.2);
+            padding: 20px; border-radius: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .sport-title { font-weight: bold; color: white; font-size: 1.1rem; }
+        .sport-meta { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .badge-sport { background: rgba(255,170,0,0.1); color: var(--sub-orange); border: 1px solid var(--sub-orange); padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">SUB<span style="color: #ffaa00;">.SEIS</span></span>
+            <div class="school-info"><span class="esime-name">BIENESTAR</span><span class="system-v" style="color:#ffaa00;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">DR. SALUD</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">SUBDIRECCIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Actividades Deportivas</h1>
+                <p class="mono-sub" style="color: #ffaa00 !important;">FOMENTO_DEPORTIVO // EQUIPOS_REPRESENTATIVOS</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="sport-card">
+                <div>
+                    <div class="sport-title">FÚTBOL VARONIL</div>
+                    <div class="sport-meta">Entrenador: Prof. Raúl • Horario: Lun-Vie 14:00</div>
+                </div>
+                <span class="badge-sport">35 INSCRITOS</span>
+            </div>
+            <div class="sport-card">
+                <div>
+                    <div class="sport-title">TOCHITO BANDERA</div>
+                    <div class="sport-meta">Entrenador: Coach Mike • Horario: Mar-Jue 12:00</div>
+                </div>
+                <span class="badge-sport">22 INSCRITOS</span>
+            </div>
+        </div>
+
+        <div class="glass-widget wide-widget" style="margin-top: 20px;">
+            <div class="widget-head" style="color: var(--sub-orange); border-bottom: 1px solid rgba(255, 170, 0, 0.2); padding-bottom: 10px; margin-bottom: 20px; font-size: 0.65rem; letter-spacing: 2px;">REGISTRO DE ATLETA</div>
+            <form>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">BOLETA</label>
+                        <input type="text" placeholder="Ingrese Boleta" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">NOMBRE COMPLETO</label>
+                        <input type="text" placeholder="Nombre del Alumno" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">DISCIPLINA</label>
+                        <input type="text" placeholder="Ej. Fútbol" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--sub-orange); display: block; margin-bottom: 5px;">NÚMERO DE SEGURO SOCIAL</label>
+                        <input type="text" placeholder="NSS" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px; font-family: 'Inter';">
+                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: right;">
+                    <button style="background: var(--sub-orange); color: black; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">INSCRIBIR ALUMNO</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="../js/sub-sidebar-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAES Cloud — Cross APIs</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e1117;--s1:#141923;--s2:#1a2030;--line:#1e2840;
+  --text:#c8d3e0;--dim:#4e5e72;
+  --blue:#7cb9f4;--green:#6ee7b7;--amber:#fcd34d;--red:#fca5a5;--purple:#c4b5fd;
+}
+body{font:13px/1.55 'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+nav{width:180px;min-width:180px;background:var(--s1);border-right:1px solid var(--line);padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:0 14px 14px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--line);margin-bottom:8px}
+.nav-grp{padding:10px 14px 4px;font-size:10px;color:var(--dim);letter-spacing:.07em;text-transform:uppercase}
+nav a{display:block;padding:5px 14px;color:var(--dim);font-size:11px;font-family:monospace;border-left:2px solid transparent;text-decoration:none;transition:all .12s}
+nav a:hover,nav a.active{color:var(--text);border-left-color:var(--blue);background:var(--s2)}
+main{flex:1;padding:36px 52px;max-width:900px}
+h1{font-size:20px;font-weight:600}
+.subtitle{color:var(--dim);font-size:12px;margin:4px 0 24px}
+.global-note{background:var(--s1);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--dim);line-height:1.6;margin-bottom:40px}
+.global-note code{font-family:monospace;color:var(--blue)}
+.svc{margin-bottom:52px}
+.svc-name{font:600 17px/1 'Cascadia Code','Fira Code',monospace;margin-bottom:5px}
+.svc-desc{font-size:12px;color:var(--dim);max-width:680px;line-height:1.6;margin-bottom:14px}
+.svc-desc code{font-family:monospace;color:var(--blue)}
+hr.svc-line{border:none;border-top:1px solid var(--line);margin-bottom:10px}
+.grp{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
+.ep{border:1px solid var(--line);border-radius:6px;margin-bottom:5px;overflow:hidden}
+.ep:hover{border-color:#28304a}
+.ep-head{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.ep-head .path{font:13px 'Cascadia Code',monospace;flex-shrink:0}
+.ep-head .path .p{color:var(--dim)}
+.ep-head .desc{font-size:12px;color:var(--dim);flex:1}
+.ep-head .tags{display:flex;gap:4px;flex-shrink:0}
+.tag{font-size:10px;padding:1px 6px;border-radius:3px;background:var(--s2);color:var(--dim);border:1px solid var(--line)}
+.tag.int{color:var(--purple);border-color:#3d2d5a;background:#1a1030}
+.tag.perm{color:#a5b4fc;border-color:#2e3362;background:#141632;font-family:monospace;font-size:9px}
+.m{font:700 10px/1 'Cascadia Code',monospace;padding:2px 7px;border-radius:3px;letter-spacing:.04em;flex-shrink:0}
+.GET{color:var(--green);background:#052e1a}
+.POST{color:#60a5fa;background:#061a33}
+.PUT{color:var(--amber);background:#1c1204}
+.DELETE{color:var(--red);background:#1c0808}
+details summary{padding:6px 12px;font-size:11px;color:var(--dim);cursor:pointer;user-select:none;list-style:none;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px;background:var(--bg)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{background:var(--s1)}
+details summary:hover{color:var(--text)}
+.arr{font-size:9px;transition:transform .15s}
+details[open] .arr{transform:rotate(90deg)}
+.ep-body{background:var(--s1);padding:10px 12px 14px;display:flex;flex-direction:column;gap:10px}
+.sl{display:block;font:700 10px/1 monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.sl.in::before{content:'→ ';color:var(--blue)}
+.sl.out::before{content:'← ';color:var(--green)}
+.row{display:grid;grid-template-columns:185px 80px 40px 1fr;gap:8px;align-items:baseline;padding:3px 6px;border-radius:3px;font-size:12px}
+.row:hover{background:var(--s2)}
+.rn{font-family:'Cascadia Code',monospace;color:var(--blue);font-size:11px}
+.rt{font-family:monospace;color:var(--green);font-size:10px}
+.rr{font-size:10px}
+.req{color:var(--red)}
+.opt{color:var(--dim)}
+.out{color:var(--dim);font-style:italic;font-size:9px}
+.rd{color:var(--dim);line-height:1.4}
+.rd code{font-family:monospace;color:var(--amber);font-size:10px}
+.note{font-size:11px;color:var(--dim);font-style:italic;padding:2px 6px}
+.note code{font-family:monospace;color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="brand">SAES Cloud</div>
+  <div class="nav-grp">Cross APIs</div>
+  <a href="#api-auth">api-auth</a>
+  <a href="#api-permissions">api-permissions</a>
+  <a href="#api-users">api-users</a>
+</nav>
+<main>
+  <h1>Cross APIs</h1>
+  <p class="subtitle">SAES Cloud · api-auth · api-permissions · api-users</p>
+  <div class="global-note">
+    Todos los endpoints (excepto <code>/login</code> y <code>/refresh</code>) requieren <code>Authorization: Bearer {access_token}</code>.<br>
+    Los endpoints marcados <strong>interno</strong> son llamados únicamente entre servicios y están bloqueados por el API gateway para clientes externos.
+  </div>
+
+  <!-- api-auth -->
+  <div class="svc" id="api-auth">
+    <div class="svc-name">api-auth</div>
+    <p class="svc-desc">Ciclo de vida de sesiones. Único servicio que conoce los hashes de contraseñas. Emite y revoca tokens opacos (32 bytes hex). Todos los demás servicios lo consultan vía <code>/internal/tokens/validate</code>.</p>
+    <hr class="svc-line">
+
+    <!-- POST /login -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/login</span>
+        <span class="desc">Autenticar usuario. Emite access token (15 min) + refresh token (7 días). Rate limit: 5 req/min por IP, 10/min por identifier.</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">identifier</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Boleta del alumno o número de empleado del docente</span></div>
+          <div class="row"><span class="rn">password</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Contraseña en texto plano — el servidor aplica argon2id</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">access_token</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Token opaco 32 bytes hex, válido 15 min</span></div>
+          <div class="row"><span class="rn">refresh_token</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Token opaco 32 bytes hex, válido 7 días</span></div>
+          <div class="row"><span class="rn">expires_in</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Segundos hasta expiración del access token. Fijo: <code>900</code></span></div>
+          <div class="row"><span class="rn">rol</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>alumno</code> | <code>docente</code> | <code>dae</code> | <code>gestion</code> | <code>perfil</code> | <code>sub</code> | <code>root</code></span></div>
+          <div class="row"><span class="rn">id_usuario</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">X-RateLimit-Limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Máx. requests permitidos en la ventana de 1 min</span></div>
+          <div class="row"><span class="rn">X-RateLimit-Remaining</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Requests restantes en la ventana actual</span></div>
+          <div class="row"><span class="rn">Retry-After</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Segundos para reintentar. Solo en respuestas <code>429</code> o <code>423</code> (cuenta bloqueada)</span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- POST /logout -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/logout</span>
+        <span class="desc">Revocar sesión activa. Marca activa: false en SesionActiva.</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Authorization</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>Bearer {access_token}</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- POST /refresh -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/refresh</span>
+        <span class="desc">Emitir nuevo access token usando el refresh token. El token anterior se invalida (rotación).</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">refresh_token</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Refresh token en claro (64 chars hex) emitido por <code>/login</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">access_token</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">Nuevo access token, válido 15 min</span></div>
+          <div class="row"><span class="rn">expires_in</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"><code>900</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- POST /internal/tokens/validate -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/internal/tokens/validate</span>
+        <span class="desc">Busca SHA-256(token) en SesionActiva. Retorna identidad completa o 401.</span>
+        <div class="tags"><span class="tag int">interno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+          <p class="note">Sin <code>Authorization</code> — llamado entre servicios detrás del gateway.</p>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">token</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Access token en claro extraído del header <code>Authorization</code> del request original</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_usuario</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">rol</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>alumno</code> | <code>docente</code> | <code>dae</code> | <code>gestion</code> | ...</span></div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">int|null</span><span class="rr out">—</span><span class="rd">Presente si rol es <code>alumno</code></span></div>
+          <div class="row"><span class="rn">id_docente</span><span class="rt">int|null</span><span class="rr out">—</span><span class="rd">Presente si rol es <code>docente</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /sessions -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/sessions</span>
+        <span class="desc">Listar sesiones activas del usuario autenticado.</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Sesiones activas del usuario</span></div>
+          <div class="row"><span class="rn">  [].id</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">ObjectId de la sesión en MongoDB</span></div>
+          <div class="row"><span class="rn">  [].dispositivo</span><span class="rt">object</span><span class="rr out">—</span><span class="rd"><code>tipo</code>, <code>sistema_operativo</code>, <code>navegador</code></span></div>
+          <div class="row"><span class="rn">  [].red</span><span class="rt">object</span><span class="rr out">—</span><span class="rd"><code>ip</code>, <code>ciudad</code>, <code>pais</code></span></div>
+          <div class="row"><span class="rn">  [].creada_en</span><span class="rt">datetime</span><span class="rr out">—</span><span class="rd">ISO 8601</span></div>
+          <div class="row"><span class="rn">  [].ultimo_uso</span><span class="rt">datetime</span><span class="rr out">—</span><span class="rd">Actualizado máx. cada 5 min por throttle</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /sessions/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/sessions/<span class="p">{id}</span></span>
+        <span class="desc">Cerrar una sesión específica (otro dispositivo).</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">ObjectId de la sesión (obtenido de <code>GET /sessions</code>)</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 204</div>
+          <p class="note">Sin cuerpo de respuesta.</p>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- DELETE /internal/users/{id}/sessions -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m DELETE">DELETE</span>
+        <span class="path">/internal/users/<span class="p">{id}</span>/sessions</span>
+        <span class="desc">Invalidar todas las sesiones activas de un usuario. Llamado por api-users al cambiar carrera.</span>
+        <div class="tags"><span class="tag int">interno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <p class="note">Sin <code>Authorization</code> — llamado entre servicios detrás del gateway.</p>
+        </div>
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_usuario en tabla Usuario</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">invalidadas</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Número de sesiones marcadas como inactivas</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+  <!-- api-permissions -->
+  <div class="svc" id="api-permissions">
+    <div class="svc-name">api-permissions</div>
+    <p class="svc-desc">RBAC del sistema. Dado un par <code>{ rol, accion }</code> responde si la operación está autorizada. En MVP resuelve desde mapa estático en código.</p>
+    <hr class="svc-line">
+
+    <!-- POST /internal/verify -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/internal/verify</span>
+        <span class="desc">Verificar si un rol tiene permiso para ejecutar una acción.</span>
+        <div class="tags"><span class="tag int">interno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+          <p class="note">Sin <code>Authorization</code> — llamado entre servicios.</p>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">role</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>alumno</code> | <code>docente</code> | <code>dae</code> | <code>gestion</code> | <code>perfil</code> | <code>sub</code> | <code>root</code></span></div>
+          <div class="row"><span class="rn">action</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Clave de acción, e.g. <code>inscribir_grupo</code>, <code>registrar_calificacion</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">permitido</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"><code>true</code> si el rol puede ejecutar la acción</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /roles/{role}/permissions -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/roles/<span class="p">{role}</span>/permissions</span>
+        <span class="desc">Listar todas las acciones permitidas para un rol.</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">role</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>alumno</code> | <code>docente</code> | <code>dae</code> | <code>gestion</code> | <code>perfil</code> | <code>sub</code> | <code>root</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">rol</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">acciones</span><span class="rt">string[]</span><span class="rr out">—</span><span class="rd">Claves de acción permitidas para el rol</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /actions -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/actions</span>
+        <span class="desc">Catálogo completo de acciones del sistema.</span>
+        <div class="tags"></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">[ ]</span><span class="rt">array</span><span class="rr out">—</span><span class="rd">Array de acciones del sistema</span></div>
+          <div class="row"><span class="rn">  [].clave</span><span class="rt">string</span><span class="rr out">—</span><span class="rd">e.g. <code>inscribir_grupo</code></span></div>
+          <div class="row"><span class="rn">  [].roles</span><span class="rt">string[]</span><span class="rr out">—</span><span class="rd">Roles que pueden ejecutar la acción</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+  <!-- api-users -->
+  <div class="svc" id="api-users">
+    <div class="svc-name">api-users</div>
+    <p class="svc-desc">Registro maestro de personas. Administrado por DAE. Al cambiar la carrera de un alumno invalida sus sesiones vía <code>api-auth /internal/users/{id}/sessions</code>.</p>
+    <hr class="svc-line">
+
+    <div class="grp">Alumnos</div>
+
+    <!-- POST /students -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/students</span>
+        <span class="desc">Dar de alta un alumno y crear su cuenta de acceso.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag perm">crear_alumno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Authorization</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>Bearer {access_token}</code></span></div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">boleta</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Número de boleta IPN, 10 caracteres</span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">curp</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">18 caracteres</span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_personal</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">telefono</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_nacimiento</span><span class="rt">date</span><span class="rr req">req</span><span class="rd"><code>YYYY-MM-DD</code></span></div>
+          <div class="row"><span class="rn">sexo</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>M</code> | <code>F</code> | <code>NB</code></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+          <div class="row"><span class="rn">semestre_actual</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_ingreso</span><span class="rt">date</span><span class="rr req">req</span><span class="rd"><code>YYYY-MM-DD</code></span></div>
+          <div class="row"><span class="rn">password</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Contraseña inicial. Se hashea con argon2id.</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">boleta</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_usuario</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK del registro Usuario creado simultáneamente</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/students/{id_alumno}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /students -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/students</span>
+        <span class="desc">Listar alumnos con paginación y filtros.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>1</code></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>50</code></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">situacion</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Regular</code> | <code>Irregular</code> | <code>Baja Temporal</code> | <code>Baja Definitiva</code></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">data</span><span class="rt">object[]</span><span class="rr out">—</span><span class="rd">Ver estructura en <code>GET /students/{id}</code></span></div>
+          <div class="row"><span class="rn">total</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Total de registros</span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /students/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/students/<span class="p">{id}</span></span>
+        <span class="desc">Obtener alumno por id_alumno.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag">Gestión</span><span class="tag">Docente</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_alumno</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">boleta</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_personal</span><span class="rt">string|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">telefono</span><span class="rt">string|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+          <div class="row"><span class="rn">situacion</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"><code>Regular</code> | <code>Irregular</code> | <code>Baja Temporal</code> | <code>Baja Definitiva</code></span></div>
+          <div class="row"><span class="rn">semestre_actual</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">fecha_ingreso</span><span class="rt">date</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- PUT /students/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/students/<span class="p">{id}</span></span>
+        <span class="desc">Actualizar datos del alumno. Boleta y CURP no son modificables.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_alumno</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <p class="note">Enviar solo los campos a actualizar.</p>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_personal</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">telefono</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">turno</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Matutino</code> | <code>Vespertino</code></span></div>
+          <div class="row"><span class="rn">situacion</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Regular</code> | <code>Irregular</code> | <code>Baja Temporal</code> | <code>Baja Definitiva</code></span></div>
+          <div class="row"><span class="rn">semestre_actual</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <p class="note">Objeto alumno completo actualizado. Misma estructura que <code>GET /students/{id}</code>.</p>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- PUT /students/{id}/career -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/students/<span class="p">{id}</span>/career</span>
+        <span class="desc">Cambiar carrera del alumno. Invalida todas sus sesiones activas vía api-auth.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag perm">cambiar_carrera_alumno</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_alumno</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Carrera destino. Validada contra api-catalog.</span></div>
+          <div class="row"><span class="rn">id_plan</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Plan de estudios de la nueva carrera</span></div>
+          <div class="row"><span class="rn">semestre_actual</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">Semestre al ingresar a la nueva carrera</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_alumno</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_carrera</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Nueva carrera asignada</span></div>
+          <div class="row"><span class="rn">sesiones_invalidadas</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">Sesiones cerradas por el cambio</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <div class="grp">Docentes</div>
+
+    <!-- POST /teachers -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m POST">POST</span>
+        <span class="path">/teachers</span>
+        <span class="desc">Dar de alta un docente y crear su cuenta de acceso.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag perm">crear_docente</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">HEADERS</div>
+          <div class="row"><span class="rn">Authorization</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>Bearer {access_token}</code></span></div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <div class="row"><span class="rn">num_empleado</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Número de empleado IPN, máx 12 caracteres</span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr req">req</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">telefono</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">tipo_contrato</span><span class="rt">enum</span><span class="rr req">req</span><span class="rd"><code>Base</code> | <code>Confianza</code> | <code>Honorarios</code></span></div>
+          <div class="row"><span class="rn">categoria</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd">e.g. <code>Profesor Asociado C</code></span></div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">password</span><span class="rt">string</span><span class="rr req">req</span><span class="rd">Contraseña inicial. Se hashea con argon2id.</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 201</div>
+          <div class="row"><span class="rn">id_docente</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK generado</span></div>
+          <div class="row"><span class="rn">num_empleado</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_usuario</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd">PK del registro Usuario creado simultáneamente</span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+          <div class="row"><span class="rn">Location</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>/teachers/{id_docente}</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /teachers -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/teachers</span>
+        <span class="desc">Listar docentes con paginación y filtros.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">QUERY</div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>1</code></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd">Default: <code>50</code></span></div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">tipo_contrato</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Base</code> | <code>Confianza</code> | <code>Honorarios</code></span></div>
+          <div class="row"><span class="rn">activo</span><span class="rt">boolean</span><span class="rr opt">opt</span><span class="rd">Default: <code>true</code></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">data</span><span class="rt">object[]</span><span class="rr out">—</span><span class="rd">Ver estructura en <code>GET /teachers/{id}</code></span></div>
+          <div class="row"><span class="rn">total</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">page</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">limit</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- GET /teachers/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m GET">GET</span>
+        <span class="path">/teachers/<span class="p">{id}</span></span>
+        <span class="desc">Obtener docente por id_docente.</span>
+        <div class="tags"><span class="tag">DAE</span><span class="tag">Gestión</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_docente</span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <div class="row"><span class="rn">id_docente</span><span class="rt">integer</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">num_empleado</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">tipo_contrato</span><span class="rt">enum</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">categoria</span><span class="rt">string|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer|null</span><span class="rr out">—</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">activo</span><span class="rt">boolean</span><span class="rr out">—</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+
+    <!-- PUT /teachers/{id} -->
+    <div class="ep">
+      <div class="ep-head">
+        <span class="m PUT">PUT</span>
+        <span class="path">/teachers/<span class="p">{id}</span></span>
+        <span class="desc">Actualizar datos del docente. num_empleado no es modificable.</span>
+        <div class="tags"><span class="tag">DAE</span></div>
+      </div>
+      <details><summary><span class="arr">▶</span> detalles</summary>
+      <div class="ep-body">
+        <div>
+          <div class="sl in">PATH</div>
+          <div class="row"><span class="rn">id</span><span class="rt">integer</span><span class="rr req">req</span><span class="rd">id_docente</span></div>
+        </div>
+        <div>
+          <div class="sl in">BODY</div>
+          <p class="note">Enviar solo los campos a actualizar.</p>
+          <div class="row"><span class="rn">nombre</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_paterno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">apellido_materno</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">correo_institucional</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">telefono</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">tipo_contrato</span><span class="rt">enum</span><span class="rr opt">opt</span><span class="rd"><code>Base</code> | <code>Confianza</code> | <code>Honorarios</code></span></div>
+          <div class="row"><span class="rn">categoria</span><span class="rt">string</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">id_academia</span><span class="rt">integer</span><span class="rr opt">opt</span><span class="rd"></span></div>
+          <div class="row"><span class="rn">activo</span><span class="rt">boolean</span><span class="rr opt">opt</span><span class="rd"></span></div>
+        </div>
+        <div>
+          <div class="sl out">BODY 200</div>
+          <p class="note">Objeto docente completo actualizado. Misma estructura que <code>GET /teachers/{id}</code>.</p>
+        </div>
+        <div>
+          <div class="sl out">HEADERS</div>
+          <div class="row"><span class="rn">Content-Type</span><span class="rt">string</span><span class="rr out">—</span><span class="rd"><code>application/json</code></span></div>
+        </div>
+      </div></details>
+    </div>
+  </div>
+
+</main>
+</div>
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.svc').forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

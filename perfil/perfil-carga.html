@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Carga Académica</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --perfil-primary: #bf00ff; }
+        .cyber-table th { color: var(--perfil-primary); border-bottom-color: rgba(191, 0, 255, 0.3); }
+        .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; width: 100px; }
+        .progress-fill { height: 100%; background: var(--perfil-primary); }
+        .status-ok { color: #00ff88; }
+        .status-over { color: #ff0055; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">PER<span style="color: #bf00ff;">.ACAD</span></span>
+            <div class="school-info"><span class="esime-name">LOGÍSTICA</span><span class="system-v" style="color:#bf00ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">COORD. ACAD</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">PERFIL ACADÉMICO</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Carga Académica</h1>
+                <p class="mono-sub" style="color: #bf00ff !important;">HORAS_FRENTE_A_GRUPO // DOCENTES</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>DOCENTE</th>
+                            <th>CATEGORÍA</th>
+                            <th>HORAS ASIGNADAS</th>
+                            <th>LÍMITE</th>
+                            <th>ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ING. JUAN PÉREZ</td>
+                            <td>TITULAR C</td>
+                            <td><div style="display:flex; align-items:center; gap:10px;"><span>18</span><div class="progress-bar"><div class="progress-fill" style="width: 90%;"></div></div></div></td>
+                            <td>20</td>
+                            <td class="status-ok">OPTIMO</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/perfil-sidebar-loader.js"></script>
+</body>
+</html>

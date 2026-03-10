@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Inscripciones</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --gestion-cyan: #00d4ff; }
+        .action-btn {
+            background: rgba(0, 212, 255, 0.1); border: 1px solid var(--gestion-cyan);
+            color: var(--gestion-cyan); padding: 5px 10px; border-radius: 4px;
+            cursor: pointer; font-size: 0.7rem; transition: 0.3s;
+        }
+        .action-btn:hover { background: var(--gestion-cyan); color: #000; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">GES<span style="color: #00d4ff;">.ESC</span></span>
+            <div class="school-info"><span class="esime-name">OPERACIONES</span><span class="system-v" style="color:#00d4ff;">V.2.0</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot" style="background: #00d4ff; box-shadow: 0 0 10px #00d4ff;"></span>
+            <div><span style="font-weight:bold; color:white;">OPERADOR 1</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">GESTIÓN ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Proceso de Inscripción</h1>
+                <p class="mono-sub" style="color: #00d4ff !important;">CICLO_2025-1 // SOLICITUDES_PENDIENTES</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>FOLIO</th>
+                            <th>ALUMNO</th>
+                            <th>PROMEDIO</th>
+                            <th>ESTADO</th>
+                            <th style="text-align: right;">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">REQ-2024-001</td>
+                            <td>LOPEZ R. CARLOS</td>
+                            <td>8.5</td>
+                            <td><span class="badge warning">PENDIENTE</span></td>
+                            <td style="text-align: right;"><button class="action-btn">VALIDAR</button></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">REQ-2024-002</td>
+                            <td>MENDIOLA A. SOFIA</td>
+                            <td>9.2</td>
+                            <td><span class="badge available">AUTORIZADO</span></td>
+                            <td style="text-align: right;"><button class="action-btn">DETALLES</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/gestion-sidebar-loader.js"></script>
+</body>
+</html>

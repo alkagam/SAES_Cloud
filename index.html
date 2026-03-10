@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPN | Global Gateway</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Ajustes específicos para móviles en el Index */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 1.8rem !important; /* Reduce el tamaño del título */
+                letter-spacing: 5px !important; /* Reduce el espaciado */
+            }
+            .subtitle {
+                font-size: 0.6rem;
+                padding: 0 10px;
+            }
+            .node-selection {
+                grid-template-columns: 1fr !important; /* Una sola columna para las tarjetas */
+                gap: 15px !important; /* Menos espacio entre tarjetas */
+            }
+            .node-item {
+                padding: 15px !important; /* Tarjetas aún más compactas */
+            }
+            .node-header {
+                margin-bottom: 10px !important; /* Reduce espacio entre código y título */
+            }
+            .node-footer {
+                margin-top: 15px !important; /* Reduce espacio antes del botón de conexión */
+            }
+            .node-body h3 {
+                font-size: 1.2rem !important; /* Título de la escuela un poco más chico */
+            }
+            /* Arreglo para que el candado no estorbe en móvil */
+            .lock-icon {
+                bottom: 10px !important;
+                right: 10px !important;
+                font-size: 1.2rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="gateway-hub">
+    
+    <div class="stars-overlay"></div>
+    <div class="glow-point"></div>
+
+    <header class="hub-header">
+        <div class="container flex-between">
+            <div class="brand-logo">
+                <span class="ipn-text">IPN</span><span class="core-text">.CORE</span>
+            </div>
+           
+        </div>
+    </header>
+
+    <main class="container hub-main">
+        <section class="hero-text">
+            <h1 class="main-title">GATEWAY DE ACCESO</h1>
+            <p class="subtitle">SELECCIONE EL NODO ACADÉMICO PARA INICIAR ENLACE</p>
+        </section>
+
+        <div class="node-selection">
+            <a href="esimecu.html" class="node-item active-node">
+                <div class="node-accent"></div>
+                <div class="node-header">
+                    <span class="node-code">NODO_01</span>
+                    <span class="node-tag">ONLINE</span>
+                </div>
+                <div class="node-body">
+                    <h3>ESIME CULHUACÁN</h3>
+                    <p>Ingeniería en Computación</p>
+                </div>
+                <div class="node-footer">
+                    <span>ESTABLECER CONEXIÓN</span>
+                    <span class="arrow">→</span>
+                </div>
+            </a>
+
+            <div class="node-item locked-node">
+                <div class="node-header">
+                    <span class="node-code">NODO_02</span>
+                    <span class="node-tag">OFFLINE</span>
+                </div>
+                <div class="node-body">
+                    <h3>UPIITA</h3>
+                    <p>Mantenimiento de Red</p>
+                </div>
+                <div class="lock-icon">🔒</div>
+            </div>
+
+            <div class="node-item locked-node">
+                <div class="node-header">
+                    <span class="node-code">NODO_03</span>
+                    <span class="node-tag">OFFLINE</span>
+                </div>
+                <div class="node-body">
+                    <h3>ESIME ZACATENCO</h3>
+                    <p>Servidor no inicializado</p>
+                </div>
+                <div class="lock-icon">🔒</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="hub-footer">
+        <div class="container footer-content">
+            <div class="footer-meta">19.3308° N, 99.1121° W // NODE_ID: MASTER</div>
+            <div class="footer-signature">♥ ALKAGAM_DEV_DRAWY ♥</div>
+        </div>
+    </footer>
+
+</body>
+</html>

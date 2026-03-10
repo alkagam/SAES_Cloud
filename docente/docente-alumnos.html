@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Lista de Alumnos</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/tema-verde.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; border: 1px solid; }
+        .status-ok { border-color: var(--neon-green); color: var(--neon-green); background: rgba(0, 255, 136, 0.1); }
+        .status-warn { border-color: #ffcc00; color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
+        
+        .action-icon { 
+            color: var(--neon-green); background: transparent; border: 1px solid var(--neon-green);
+            width: 25px; height: 25px; border-radius: 4px; cursor: pointer; display: inline-flex;
+            align-items: center; justify-content: center; transition: 0.3s; text-decoration: none;
+        }
+        .action-icon:hover { background: var(--neon-green); color: black; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">DOCENTE_SUITE_V.2</span></div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ING. PÉREZ</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ACADEMIA COMPUTACIÓN</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Lista de Alumnos</h1>
+                <p class="mono-sub" style="color: var(--doc-primary) !important;">GRUPO_2CV2 // CÁLCULO_VECTORIAL</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">INSCRITOS:</span>
+                <span class="health-value" style="color: var(--neon-green);">32 ALUMNOS</span>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th>BOLETA</th>
+                            <th>NOMBRE DEL ALUMNO</th>
+                            <th>CORREO INSTITUCIONAL</th>
+                            <th>SITUACIÓN</th>
+                            <th style="text-align: center;">ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="mono">2022640001</td>
+                            <td>MORALES S. SAUL</td>
+                            <td style="font-size: 0.75rem; opacity: 0.8;">s.morales@alumno.ipn.mx</td>
+                            <td><span class="status-badge status-ok">REGULAR</span></td>
+                            <td style="text-align: center;"><a href="#" class="action-icon">✉</a></td>
+                        </tr>
+                        <tr>
+                            <td class="mono">2021350220</td>
+                            <td>GARCÍA P. ANA</td>
+                            <td style="font-size: 0.75rem; opacity: 0.8;">a.garcia@alumno.ipn.mx</td>
+                            <td><span class="status-badge status-ok">REGULAR</span></td>
+                            <td style="text-align: center;"><a href="#" class="action-icon">✉</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/docente-sidebar-loader.js"></script>
+</body>
+</html>

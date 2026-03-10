@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Manual de Usuario</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00ff88; }
+        .ipn-logo, .system-v, .section-title, .nav-item.active, .nav-item:hover, .user-dot, .widget-header, .mono-sub, .health-value, .status-bar-fill, .btn-outline-cyan, .badge.available { color: var(--neon-green) !important; border-color: var(--neon-green) !important; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+        
+        .manual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .manual-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; transition: 0.3s; }
+        .manual-card:hover { border-color: var(--neon-green); background: rgba(0, 255, 136, 0.02); transform: translateY(-5px); }
+        .manual-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .manual-title { font-weight: bold; color: white; margin-bottom: 5px; display: block; }
+        .manual-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 15px; display: block; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">SAES_CLOUD_V.26</span></div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">S. Morales</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span></div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Manual de Usuario</h1>
+                <p class="mono-sub">DOCUMENTACIÓN_DEL_SISTEMA // GUÍAS_RÁPIDAS</p>
+            </div>
+        </header>
+
+        <div class="manual-grid">
+            <div class="manual-card">
+                <span class="manual-icon">📝</span>
+                <span class="manual-title">Inscripciones</span>
+                <span class="manual-desc">Guía paso a paso para el proceso de reinscripción y selección de materias.</span>
+                <button class="btn-outline-cyan">VER GUÍA</button>
+            </div>
+            <div class="manual-card">
+                <span class="manual-icon">📊</span>
+                <span class="manual-title">Kárdex y Calificaciones</span>
+                <span class="manual-desc">Cómo interpretar tu historial académico y consultar boletas.</span>
+                <button class="btn-outline-cyan">VER GUÍA</button>
+            </div>
+            <div class="manual-card">
+                <span class="manual-icon">🎓</span>
+                <span class="manual-title">Titulación</span>
+                <span class="manual-desc">Requisitos y modalidades para iniciar tu trámite de titulación.</span>
+                <button class="btn-outline-cyan">VER GUÍA</button>
+            </div>
+            <div class="manual-card">
+                <span class="manual-icon">🔐</span>
+                <span class="manual-title">Seguridad</span>
+                <span class="manual-desc">Configuración de 2FA y recuperación de contraseñas.</span>
+                <button class="btn-outline-cyan">VER GUÍA</button>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

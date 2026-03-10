@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | NODO NO ENCONTRADO</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .error-wrapper {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; height: 100vh; text-align: center;
+        }
+        .error-code { font-size: 8rem; color: var(--guinda-neon); text-shadow: 0 0 20px var(--guinda-neon); margin: 0; }
+        .glitch-msg { font-size: 1.5rem; color: var(--cyan); letter-spacing: 5px; }
+
+        @media (max-width: 768px) {
+            .error-code { font-size: 5rem; }
+            .glitch-msg { font-size: 1rem; letter-spacing: 2px; }
+        }
+    </style>
+</head>
+<body class="esime-home">
+    <div class="crt-overlay"></div>
+    <main class="error-wrapper">
+        <h1 class="error-code">404</h1>
+        <p class="glitch-msg">ERROR: ENLACE_INTERRUMPIDO</p>
+        <p style="opacity: 0.5;">El recurso solicitado no existe en el Sistemas.</p>
+        <br>
+        <a href="index.html" class="glow-btn" style="text-decoration: none; padding: 10px 20px;">REINTENTAR_CONEXION</a>
+    </main>
+</body>
+</html>

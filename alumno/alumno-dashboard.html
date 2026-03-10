@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Portal Alumno</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* --- TEMA VERDE (OVERRIDE) --- */
+        :root {
+            --neon-green: #00ff88;
+            --dark-green: #004d26;
+            --glass-green: rgba(0, 255, 136, 0.05);
+        }
+
+        /* Sobrescribimos colores del global.css solo para esta página */
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .system-v { color: var(--neon-green) !important; }
+        .section-title { color: var(--neon-green) !important; opacity: 0.7; }
+        
+        /* Navegación Activa Verde */
+        .nav-item.active {
+            background: rgba(0, 255, 136, 0.1) !important;
+            color: var(--neon-green) !important;
+            box-shadow: inset 3px 0 0 var(--neon-green) !important;
+        }
+        .nav-item:hover { color: var(--neon-green) !important; background: rgba(255,255,255,0.03); }
+
+        /* Widgets y Textos */
+        .widget-header { 
+            color: var(--neon-green) !important; 
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2) !important; 
+        }
+        .mono-sub { color: rgba(0, 255, 136, 0.6) !important; }
+        .health-value { color: var(--neon-green); font-weight: bold; text-shadow: 0 0 10px var(--neon-green); }
+
+        /* Barras y Botones */
+        .status-bar-fill { 
+            background: var(--neon-green) !important; 
+            box-shadow: 0 0 15px var(--neon-green) !important; 
+        }
+        .btn-outline-cyan {
+            border-color: var(--neon-green) !important;
+            color: var(--neon-green) !important;
+        }
+        .btn-outline-cyan:hover {
+            background: var(--neon-green) !important;
+            color: #000 !important;
+            box-shadow: 0 0 20px var(--neon-green) !important;
+        }
+
+        /* Badges */
+        .badge.available { border-color: var(--neon-green) !important; color: var(--neon-green) !important; background: rgba(0,255,136,0.1) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+
+        /* Ajustes Responsivos Extra */
+        @media (max-width: 768px) {
+            .sidebar-fixed { border-bottom: 1px solid rgba(0, 255, 136, 0.2); }
+        }
+    </style>
+</head>
+<body class="dashboard-layout">
+    
+    <div class="background-blur"></div>
+
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info">
+                <span class="esime-name">ESIME CU</span>
+                <span class="system-v">SAES_CLOUD_V.26</span>
+            </div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+
+        <nav class="nav-container">
+            <!-- El menú se carga dinámicamente desde js/sidebar-loader.js -->
+        </nav>
+
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div style="display:flex; flex-direction:column;">
+                <span class="user-name" style="font-weight:bold; color:white;">S. Morales</span>
+                <span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span>
+            </div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Dashboard de Alumno</h1>
+                <p class="mono-sub">CORE_ACCESS // CAT_A_OVERVIEW</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">AZURE_AKS_STATUS:</span>
+                <span class="health-value">OPTIMAL</span>
+            </div>
+        </header>
+
+        <section class="dashboard-grid">
+            
+            <div class="glass-widget stat-summary">
+                <div class="widget-header">ESTADO_ACADÉMICO</div>
+                <div class="stat-flex">
+                    <div class="stat-box">
+                        <span class="label">PROMEDIO</span>
+                        <span class="value" style="color: #fff;">9.2</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="label">CRÉDITOS</span>
+                        <span class="value" style="color: #fff;">82%</span>
+                    </div>
+                </div>
+                <div class="status-bar-container" style="margin-top: 15px;">
+                    <div class="status-bar-fill" style="width: 82%;"></div>
+                </div>
+            </div>
+
+            <div class="glass-widget">
+                <div class="widget-header">PRÓXIMOS_TRÁMITES</div>
+                <ul class="action-list">
+                    <li>
+                        <span>Inscripción 2026-2</span>
+                        <span class="badge available">DISPONIBLE</span>
+                    </li>
+                    <li>
+                        <span>Evaluación Docente</span>
+                        <a href="alumno-evaluacion.html" class="badge warning" style="text-decoration: none;">PENDIENTE</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="glass-widget">
+                <div class="widget-header">HORARIO_ACTUAL</div>
+                <div class="schedule-preview" style="font-size: 0.85rem;">
+                    <p style="margin-bottom:5px;"><strong>Distribuidos</strong> | 14:30 - 16:00</p>
+                    <p class="dim" style="opacity:0.6;">Edif. 2 - Salón 204</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

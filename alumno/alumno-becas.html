@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Becas</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00ff88; }
+        .ipn-logo, .system-v, .section-title, .nav-item.active, .nav-item:hover, .user-dot, .widget-header, .mono-sub, .health-value, .status-bar-fill, .btn-outline-cyan, .badge.available { color: var(--neon-green) !important; border-color: var(--neon-green) !important; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+        .cyber-table th { color: var(--neon-green); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">SAES_CLOUD_V.26</span></div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">S. Morales</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span></div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Estado de Beca</h1>
+                <p class="mono-sub">APOYOS_ECONÓMICOS // MANUTENCIÓN</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">ESTATUS:</span>
+                <span class="health-value">BENEFICIARIO ACTIVO</span>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-header">BECA INSTITUCIONAL TIPO A</div>
+            <p style="font-size: 0.8rem; margin-bottom: 20px;">Periodo: 2024-2025 • Monto Mensual: $1,800.00 MXN</p>
+            
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead><tr><th>MES</th><th>FECHA DE PAGO</th><th>REFERENCIA</th><th>ESTADO</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>SEPTIEMBRE</td>
+                            <td>15/09/2024</td>
+                            <td>SPEI-998877</td>
+                            <td><span class="badge available">DEPOSITADO</span></td>
+                        </tr>
+                        <tr>
+                            <td>OCTUBRE</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="badge warning">PENDIENTE</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

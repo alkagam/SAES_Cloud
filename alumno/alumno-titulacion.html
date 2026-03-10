@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Titulación</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon-green: #00ff88; }
+        .ipn-logo, .system-v, .section-title, .nav-item.active, .nav-item:hover, .user-dot, .widget-header, .mono-sub, .health-value, .status-bar-fill, .btn-outline-cyan, .badge.available { color: var(--neon-green) !important; border-color: var(--neon-green) !important; }
+        .nav-item.active { background: rgba(0, 255, 136, 0.1) !important; box-shadow: inset 3px 0 0 var(--neon-green) !important; }
+        .user-dot { background: var(--neon-green) !important; box-shadow: 0 0 8px var(--neon-green) !important; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info"><span class="esime-name">ESIME CU</span><span class="system-v">SAES_CLOUD_V.26</span></div>
+            <button class="menu-toggle" onclick="document.querySelector('.sidebar-fixed').classList.toggle('active')">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">S. Morales</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ALUMNO REGULAR</span></div>
+        </div>
+        <a href="../esimecu.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_ENLACE</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Titulación</h1>
+                <p class="mono-sub">OPCIÓN: TESIS // PROYECTO_FINAL</p>
+            </div>
+        </header>
+
+        <div class="glass-widget wide-widget">
+            <div class="widget-header">ESTADO DEL TRÁMITE</div>
+            <ul class="action-list">
+                <li><span>1. Registro de Opción</span> <span class="badge available">COMPLETADO</span></li>
+                <li><span>2. Asignación de Asesores</span> <span class="badge available">COMPLETADO</span></li>
+                <li><span>3. Revisión de Protocolo</span> <span class="badge warning">EN PROCESO</span></li>
+                <li><span>4. Examen Profesional</span> <span class="badge locked">BLOQUEADO</span></li>
+            </ul>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <strong style="color: white; font-size: 0.8rem;">TEMA REGISTRADO:</strong>
+                <p style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">"Implementación de Redes Neuronales en Sistemas de Seguridad Escolar"</p>
+            </div>
+        </div>
+    </main>
+    <script src="../js/sidebar-loader.js"></script>
+</body>
+</html>

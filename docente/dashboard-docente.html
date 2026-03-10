@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Portal Docente</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/tema-verde.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --text-gray: rgba(255, 255, 255, 0.6); }
+
+        /* Widgets mejorados */
+        .glass-widget {
+            background: rgba(10, 20, 25, 0.7);
+            border-color: rgba(0, 255, 136, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-widget:hover {
+            transform: translateY(-3px);
+            border-color: var(--doc-primary);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.1);
+        }
+        .widget-header {
+            color: var(--doc-primary) !important;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2) !important;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            font-weight: bold;
+        }
+
+        /* Stats Cards */
+        .stat-card { display: flex; align-items: center; justify-content: space-between; }
+        .stat-value { font-size: 2.2rem; font-weight: 700; color: white; text-shadow: 0 0 20px rgba(0, 255, 136, 0.3); line-height: 1; }
+        .stat-label { font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .stat-icon { font-size: 2rem; opacity: 0.8; filter: drop-shadow(0 0 5px var(--doc-primary)); }
+
+        /* Botones estilo Docente */
+        .btn-doc {
+            background: transparent;
+            border: 1px solid var(--doc-primary);
+            color: var(--doc-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono';
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-doc:hover {
+            background: var(--doc-primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--doc-primary);
+        }
+        
+        .badge-doc {
+            padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: bold;
+            border: 1px solid var(--doc-primary); color: var(--doc-primary); background: rgba(0, 255, 136, 0.1);
+        }
+        
+        /* Lista de Clases */
+        .class-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .class-item:last-child { border-bottom: none; }
+        .class-time { font-family: 'JetBrains Mono'; color: var(--doc-primary); font-size: 0.8rem; margin-right: 15px; }
+        .class-info strong { display: block; color: white; font-size: 0.9rem; }
+        .class-info span { font-size: 0.7rem; color: var(--text-gray); }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info">
+                <span class="esime-name">ESIME CU</span>
+                <span class="system-v">DOCENTE_SUITE_V.2</span>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container">
+            <!-- El menú se carga dinámicamente desde js/docente-sidebar-loader.js -->
+        </nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div style="display:flex; flex-direction:column;">
+                <span class="user-name" style="font-weight:bold; color:white;">ING. PÉREZ</span>
+                <span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">ACADEMIA COMPUTACIÓN</span>
+            </div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Panel Docente</h1>
+                <p class="mono-sub" style="color: var(--doc-primary) !important;">GESTIÓN_ACADÉMICA // PERIODO_2025-1</p>
+            </div>
+            <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
+                <span class="health-label" style="opacity:0.6;">CAPTURA DE CALIFICACIONES:</span>
+                <span class="health-value" style="color: #00ff88;">ABIERTA</span>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="dashboard-grid">
+            <div class="glass-widget stat-card">
+                <div><div class="stat-label">Grupos Asignados</div><div class="stat-value">4</div></div>
+                <div class="stat-icon">📚</div>
+            </div>
+            <div class="glass-widget stat-card">
+                <div><div class="stat-label">Total Alumnos</div><div class="stat-value">128</div></div>
+                <div class="stat-icon">🎓</div>
+            </div>
+            <div class="glass-widget stat-card">
+                <div><div class="stat-label">Asistencia Hoy</div><div class="stat-value" style="color: #00ff88;">92%</div></div>
+                <div class="stat-icon">✅</div>
+            </div>
+            <div class="glass-widget stat-card">
+                <div><div class="stat-label">Pendientes</div><div class="stat-value" style="color: #ffcc00;">3</div></div>
+                <div class="stat-icon">🔔</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-grid" style="grid-template-columns: 2fr 1fr; margin-top: 25px;">
+            
+            <!-- Clases de Hoy -->
+            <div class="glass-widget">
+                <div class="widget-header">CLASES DE HOY</div>
+                <div class="class-list">
+                    <div class="class-item">
+                        <div style="display:flex; align-items:center;">
+                            <span class="class-time">07:00 - 08:30</span>
+                            <div class="class-info">
+                                <strong>Cálculo Vectorial</strong>
+                                <span>Grupo 2CV2 • Salón 101 • Edificio 1</span>
+                            </div>
+                        </div>
+                        <span class="badge-doc">EN CURSO</span>
+                    </div>
+                    <div class="class-item">
+                        <div style="display:flex; align-items:center;">
+                            <span class="class-time">08:30 - 10:00</span>
+                            <div class="class-info">
+                                <strong>Programación Orientada a Objetos</strong>
+                                <span>Grupo 2CV4 • Lab. de Cómputo 3</span>
+                            </div>
+                        </div>
+                        <span class="badge-doc" style="border-color: #aaa; color: #aaa;">SIGUIENTE</span>
+                    </div>
+                    <div class="class-item">
+                        <div style="display:flex; align-items:center;">
+                            <span class="class-time">10:00 - 11:30</span>
+                            <div class="class-info">
+                                <strong>Estructura de Datos</strong>
+                                <span>Grupo 3CV1 • Lab. de Cómputo 1</span>
+                            </div>
+                        </div>
+                        <span class="badge-doc" style="border-color: #aaa; color: #aaa;">PENDIENTE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas -->
+            <div class="glass-widget">
+                <div class="widget-header">ACCIONES RÁPIDAS</div>
+                <button class="btn-doc">📝 Pasar Lista Rápida</button>
+                <button class="btn-doc">📊 Capturar Parcial</button>
+                <button class="btn-doc">📩 Justificantes (2)</button>
+                <button class="btn-doc">📅 Ver Horario Completo</button>
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 5px;">
+                        <span style="color: white;">Avance del Programa</span>
+                        <span style="color: var(--doc-primary);">45%</span>
+                    </div>
+                    <div class="status-bar-container" style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden;">
+                        <div class="status-bar-fill" style="width: 45%; background: var(--doc-primary); height: 100%; box-shadow: 0 0 10px var(--doc-primary);"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <script src="../js/docente-sidebar-loader.js"></script>
+</body>
+</html>
