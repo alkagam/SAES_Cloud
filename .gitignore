@@ -14,11 +14,7 @@ Thumbs.db
 *.tar.gz
 *.rar
 
-# Dependencias (si usas Node.js en el futuro)
-node_modules/
-npm-debug.log
-
-# IDEs
+# IDEs y build tools
 .idea/
 *.iml
 .vscode/
@@ -26,3 +22,6 @@ target/
 bin/
 *.swp
 
+# Dependencias (si usas Node.js en el futuro)
+node_modules/
+npm-debug.log

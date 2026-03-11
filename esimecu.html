@@ -68,6 +68,7 @@
             font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
         }
         .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4); }
+        .error-message { margin-top: 15px; padding: 10px; border-radius: 8px; background-color: rgba(255, 0, 85, 0.1); border: 1px solid #ff0055; color: #ff0055; font-size: 0.8rem; text-align: center; display: none; }
 
         @media (max-width: 480px) {
             .login-card { padding: 30px 20px; width: 85%; }
@@ -88,11 +89,12 @@
                 <p style="font-family: 'JetBrains Mono'; font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 5px;">NODO: ESIME_CULHUACÁN_SECURE</p>
             </div>
 
-            <form action="alumno/alumno-dashboard.html">
-                <div class="input-group"><label class="input-label">BOLETA / ID</label><input type="text" class="input-field" placeholder="2022..." required></div>
-                <div class="input-group"><label class="input-label">CONTRASEÑA</label><input type="password" class="input-field" placeholder="••••••••" required></div>
+            <form id="login-form">
+                <div class="input-group"><label class="input-label">BOLETA / ID</label><input type="text" id="identifier" class="input-field" placeholder="2022..." required></div>
+                <div class="input-group"><label class="input-label">CONTRASEÑA</label><input type="password" id="password" class="input-field" placeholder="••••••••" required></div>
                 <button type="submit" class="login-btn">INICIAR_SESIÓN</button>
             </form>
+            <div id="error-message" class="error-message"></div>
 
             <div style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 0.75rem;">
                 <a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none;">¿Olvidaste tu contraseña?</a>
@@ -101,5 +103,56 @@
         </div>
         <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.6rem; opacity: 0.3;">ENCRIPTACIÓN: AES-256 // ESTADO: SEGURO</div>
     </main>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/saes-cloud-api/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Guardar tokens para futuras peticiones
+                    sessionStorage.setItem('accessToken', data.access_token);
+                    sessionStorage.setItem('refreshToken', data.refresh_token);
+                    
+                    // Redirigir según el rol
+                    switch (data.rol) {
+                        case 'alumno':
+                            window.location.href = 'alumno/alumno-dashboard.html';
+                            break;
+                        case 'dae':
+                        case 'gestion':
+                        case 'root':
+                        case 'sub':
+                        case 'perfil':
+                            window.location.href = 'dae/dashboard-dae.html'; // Redirigir al dashboard de DAE
+                            break;
+                        case 'docente':
+                             window.location.href = 'docente/dashboard-docente.html';
+                             break;
+                        default:
+                            errorDiv.textContent = 'Error: Rol de usuario desconocido o no soportado.';
+                            errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.textContent = `Error: ${data.error || 'Credenciales incorrectas.'}`;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Error de red. No se pudo conectar al servidor.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
