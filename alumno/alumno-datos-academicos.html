@@ -63,7 +63,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">CARRERA</span>
-                    <span class="info-value">INGENIERÍA EN COMPUTACIÓN</span>
+                    <span class="info-value carrera-value">CARGANDO...</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">PLAN DE ESTUDIOS</span>
@@ -102,6 +102,32 @@
             </div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
     <script src="../js/sidebar-loader.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const token = sessionStorage.getItem('accessToken');
+                if (!token) return;
+                // get current user to know student id
+                const me = await fetch(`${API_BASE_URL}/saes-cloud-api/api/users/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r=>r.json());
+                if (!me.id_alumno) return;
+                const student = await fetch(`${API_BASE_URL}/saes-cloud-api/api/users/students/${me.id_alumno}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r=>r.json());
+                if (student.id_carrera) {
+                    const nombre = await getCareerName(student.id_carrera);
+                    const span = document.querySelector('.carrera-value');
+                    if (span) span.textContent = nombre;
+                }
+                //-- you could populate other metrics similarly by querying additional endpoints
+            } catch(e) {
+                console.error('Error cargando datos académicos:', e);
+            }
+        });
+    </script>
 </body>
 </html>

@@ -169,28 +169,28 @@
             <div class="glass-widget stat-card">
                 <div>
                     <div class="stat-label">Total Alumnos</div>
-                    <div class="stat-value">14,502</div>
+                    <div id="stat-total-students" class="stat-value">Cargando...</div>
                 </div>
                 <div class="stat-icon">👥</div>
             </div>
             <div class="glass-widget stat-card">
                 <div>
                     <div class="stat-label">Inscritos Hoy</div>
-                    <div class="stat-value">342</div>
+                    <div id="stat-inscritos-hoy" class="stat-value">Cargando...</div>
                 </div>
                 <div class="stat-icon">📝</div>
             </div>
             <div class="glass-widget stat-card">
                 <div>
                     <div class="stat-label">Solicitudes</div>
-                    <div class="stat-value" style="color: #ffcc00;">18</div>
+                    <div id="stat-solicitudes" class="stat-value" style="color: #ffcc00;">Cargando...</div>
                 </div>
                 <div class="stat-icon">⚠️</div>
             </div>
             <div class="glass-widget stat-card">
                 <div>
                     <div class="stat-label">Actas Abiertas</div>
-                    <div class="stat-value">56</div>
+                    <div id="stat-actas" class="stat-value">Cargando...</div>
                 </div>
                 <div class="stat-icon">📂</div>
             </div>
@@ -253,6 +253,32 @@
         </div>
 
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                // total students
+                const students = await apiFetch(`${API_BASE_URL}/saes-cloud-api/api/users/students`);
+                document.getElementById('stat-total-students').textContent = students.length.toLocaleString();
+            } catch(e){ console.warn('failed loading student count',e); }
+
+            try {
+                const pending = await fetchPendingRequests();
+                document.getElementById('stat-solicitudes').textContent = pending.length;
+            } catch(e){ console.warn('failed loading pending',e); }
+
+            try {
+                // actas abiertas approximated by groups with inscritos >0
+                const grpResp = await fetchGroups({limit:50});
+                const open = grpResp.data.filter(g=> (g.inscritos||0)>0).length;
+                document.getElementById('stat-actas').textContent = open;
+            } catch(e){ console.warn('failed loading actas',e); }
+
+            // inscritas hoy not easily computed; leave manual or static
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | DAE API Reference</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* --- DAE THEME OVERRIDES --- */
+        :root { --dae-primary: #ff0055; }
+        .ipn-logo { color: #fff !important; text-shadow: 0 0 15px rgba(255, 0, 85, 0.5); }
+        .system-v { color: var(--dae-primary) !important; }
+        .user-dot { background: var(--dae-primary) !important; box-shadow: 0 0 10px var(--dae-primary) !important; }
+        .btn-exit:hover { color: var(--dae-primary) !important; }
+        .main-stage { padding: 20px; } /* Less padding for this page */
+
+        /* --- API REFERENCE STYLES (ADAPTED) --- */
+        :root {
+          --surface:   rgba(20, 20, 25, 0.7);
+          --surface2:  rgba(30, 23, 40, 0.7);
+          --border:    rgba(255, 0, 85, 0.2);
+          --text:      #c9d1e0;
+          --muted:     #8892b0;
+          --accent:    var(--dae-primary);
+          --accent2:   #f472b6;
+
+          --get:       #22c55e;
+          --get-bg:    #0d2a1a;
+          --post:      #3b82f6;
+          --post-bg:   #0d1e3a;
+          --put:       #f59e0b;
+          --put-bg:    #2a1d00;
+          --delete:    #ef4444;
+          --delete-bg: #2a0d0d;
+        }
+        
+        .endpoint {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          margin-bottom: 8px;
+          overflow: hidden;
+        }
+        .endpoint-header {
+          display: grid;
+          grid-template-columns: 60px 1fr auto;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          cursor: pointer;
+          user-select: none;
+        }
+        .endpoint-header:hover { background: var(--surface2); }
+
+        .method {
+          font-size: 11px; font-weight: 700; padding: 3px 0;
+          border-radius: 4px; text-align: center; letter-spacing: .04em;
+        }
+        .m-get    { color: var(--get);    background: var(--get-bg); }
+        .m-post   { color: var(--post);   background: var(--post-bg); }
+        .m-put    { color: var(--put);    background: var(--put-bg); }
+        .m-delete { color: var(--delete); background: var(--delete-bg); }
+
+        .path { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #e2e8f0; }
+        .path .param { color: #fbbf24; }
+
+        .endpoint-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+        .tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+        .tag-auth     { background: rgba(239,68,68,.15); color: #f87171; }
+        .tag-perm     { background: rgba(245,158,11,.15); color: #fbbf24; }
+        .tag-open     { background: rgba(34,197,94,.15);  color: #4ade80; }
+        .tag-ratelim  { background: rgba(124,92,252,.15); color: #c084fc; }
+
+        .endpoint-body {
+          display: none; padding: 0 16px 16px;
+          border-top: 1px solid var(--border);
+        }
+        .endpoint-body.open { display: block; }
+
+        .endpoint-desc { color: var(--muted); font-size: 13px; margin: 12px 0 10px; }
+
+        .params-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+        .params-table th {
+          text-align: left; padding: 6px 10px; color: var(--muted); font-weight: 600;
+          font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+          border-bottom: 1px solid var(--border);
+        }
+        .params-table td { padding: 7px 10px; border-bottom: 1px solid rgba(42,47,69,.5); vertical-align: top; }
+        .params-table tr:last-child td { border-bottom: none; }
+        .params-table .pname { font-family: monospace; color: #93c5fd; }
+        .params-table .ptype { color: var(--muted); }
+        .params-table .preq  { color: #f87171; font-size: 10px; font-weight: 700; }
+        .params-table .popt  { color: var(--muted); font-size: 10px; }
+
+        .resp-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 6px; }
+        
+        pre.code {
+          background: #0a0d14; border: 1px solid var(--border); border-radius: 8px;
+          padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+          line-height: 1.7; overflow-x: auto; white-space: pre; color: #abb2bf;
+        }
+        .code .cm  { color: var(--muted); }
+        .code .kw  { color: #c678dd; }
+        .code .str { color: #98c379; }
+        .code .var { color: #e06c75; }
+        .code .num { color: #d19a66; }
+        .code .key { color: #56b6c2; }
+    </style>
+</head>
+<body class="dashboard-layout">
+    <div class="background-blur"></div>
+    <aside class="sidebar-fixed">
+        <div class="sidebar-header">
+            <span class="ipn-logo">IPN</span>
+            <div class="school-info">
+                <span class="esime-name">ESIME CU</span>
+                <span class="system-v">DAE_SUITE_V.2</span>
+            </div>
+            <button class="menu-toggle">☰</button>
+        </div>
+        <nav class="nav-container"></nav>
+        <div class="user-mini-card">
+            <span class="user-dot"></span>
+            <div><span style="font-weight:bold; color:white;">ADMINISTRADOR</span><span style="font-size:0.6rem; color:rgba(255,255,255,0.5);">CONTROL ESCOLAR</span></div>
+        </div>
+        <a href="../index.html" class="btn-exit" style="color: #fff; opacity: 0.7;">CERRAR_SESIÓN</a>
+    </aside>
+
+    <main class="main-stage">
+        <header class="stage-header">
+            <div class="header-main">
+                <h1>Referencia de API</h1>
+                <p class="mono-sub" style="color: var(--dae-primary) !important;">DOCUMENTACIÓN_TÉCNICA_DE_ENDPOINTS</p>
+            </div>
+        </header>
+
+        <section id="users">
+          <div class="service-block">
+            <div class="widget-header">Servicio de Usuarios</div>
+
+            <!-- POST /students -->
+            <div class="endpoint" style="margin-top: 15px;">
+              <div class="endpoint-header" onclick="toggle(this)">
+                <span class="method m-post">POST</span>
+                <span class="path">/api/students</span>
+                <div class="endpoint-meta">
+                  <span class="tag tag-auth">Bearer</span>
+                  <span class="tag tag-perm">crear_alumno</span>
+                </div>
+              </div>
+              <div class="endpoint-body">
+                <p class="endpoint-desc">Da de alta un alumno y crea su usuario en el sistema.</p>
+              </div>
+            </div>
+
+            <!-- GET /students/{id} -->
+            <div class="endpoint">
+              <div class="endpoint-header" onclick="toggle(this)">
+                <span class="method m-get">GET</span>
+                <span class="path">/api/students/<span class="param">{id}</span></span>
+                <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+              </div>
+              <div class="endpoint-body">
+                <p class="endpoint-desc">Obtiene el detalle completo de un alumno por su <code>id_alumno</code>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <section id="business" style="margin-top: 30px;">
+          <div class="service-block">
+            <div class="widget-header">Servicio de Negocio</div>
+
+            <!-- GET /subjects -->
+            <div class="endpoint" style="margin-top: 15px;">
+              <div class="endpoint-header" onclick="toggle(this)">
+                <span class="method m-get">GET</span>
+                <span class="path">/api/subjects</span>
+                <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+              </div>
+              <div class="endpoint-body">
+                <p class="endpoint-desc">Lista todas las materias disponibles en el catálogo.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+    </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        function toggle(header) {
+            const body = header.nextElementSibling;
+            body.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

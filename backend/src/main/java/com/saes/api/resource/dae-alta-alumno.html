@@ -65,7 +65,7 @@
                         <div class="form-group"><label for="correo_institucional">Correo Institucional</label><input type="email" id="correo_institucional" name="correo_institucional" required></div>
                         <div class="form-group"><label for="correo_personal">Correo Personal</label><input type="email" id="correo_personal" name="correo_personal"></div>
                         <div class="form-group"><label for="telefono">Teléfono</label><input type="tel" id="telefono" name="telefono"></div>
-                        <div class="form-group"><label for="id_carrera">ID de Carrera</label><input type="number" id="id_carrera" name="id_carrera" required></div>
+                        <div class="form-group"><label for="id_carrera">Carrera</label><select id="id_carrera" name="id_carrera" required class="career-select"><option value="">Cargando...</option></select></div>
                         <div class="form-group"><label for="turno">Turno</label><select id="turno" name="turno" required><option value="Matutino">Matutino</option><option value="Vespertino">Vespertino</option></select></div>
                         <div class="form-group"><label for="semestre_actual">Semestre Actual</label><input type="number" id="semestre_actual" name="semestre_actual" required></div>
                         <div class="form-group"><label for="fecha_ingreso">Fecha de Ingreso</label><input type="date" id="fecha_ingreso" name="fecha_ingreso" required></div>
@@ -80,8 +80,18 @@
         </main>
     </div>
 
+    <script src="../js/api-config.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script src="../js/catalog-service.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await populateCareers(document.getElementById('id_carrera'));
+            } catch(err) {
+                console.error('Error cargando carreras:', err);
+            }
+        });
+
         document.getElementById('form-alta-alumno').addEventListener('submit', async function(event) {
             event.preventDefault(); // Evitar que el formulario se envíe de la forma tradicional
 
@@ -106,13 +116,25 @@
             resultDiv.style.display = 'none';
 
             try {
+                const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/students`;
+                const accessToken = sessionStorage.getItem('accessToken');
+
+                if (!accessToken) {
+                    resultDiv.className = 'form-result error';
+                    resultDiv.innerHTML = `<strong>Error de Autenticación:</strong> No se encontró token. Por favor, inicie sesión.`;
+                    resultDiv.style.display = 'block';
+                    // Opcional: redirigir al login después de un momento
+                    // setTimeout(() => window.location.href = 'login-dae.html', 3000);
+                    return;
+                }
+
                 // Enviar la petición a la API
-                const response = await fetch('/saes-cloud-api/api/students', {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // En una aplicación real, el token se obtendría de localStorage o sessionStorage
-                        'Authorization': 'Bearer TU_ACCESS_TOKEN_DE_DAE'
+                        // Usamos el token real guardado en la sesión
+                        'Authorization': `Bearer ${accessToken}`
                     },
                     body: JSON.stringify(payload)
                 });

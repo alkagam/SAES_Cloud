@@ -95,6 +95,33 @@
             </div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script src="../js/dae-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                // for demo, fetch first page of groups
+                const resp = await fetchGroups({limit: 20});
+                const tbody = document.getElementById('groups-body');
+                tbody.innerHTML = '';
+                resp.data.forEach(g => {
+                    const tr = document.createElement('tr');
+                    const filled = g.inscritos || 0;
+                    const max = g.cupo_max || '';
+                    tr.innerHTML = `
+                        <td>${g.clave_grupo || ''}</td>
+                        <td>${g.id_materia || ''}</td>
+                        <td>${g.id_docente || ''}</td>
+                        <td>${filled}/${max}</td>
+                        <td>${filled < max ? '<button class="add-btn">AGREGAR</button>' : '<span class="badge locked">LLENO</span>'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) { console.error('Error loading groups', e); }
+        });
+    </script>
 </body>
 </html>

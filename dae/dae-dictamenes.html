@@ -47,41 +47,45 @@
         <div class="glass-widget wide-widget">
             <div class="widget-header">SOLICITUDES PENDIENTES</div>
             
-            <div class="request-card priority-high">
-                <div class="request-info">
-                    <h3>AMPLIACIÓN DE TIEMPO MÁXIMO</h3>
-                    <p>Boleta: 2018300123 • Alumno: Pérez J. • Motivo: Salud</p>
-                </div>
-                <div>
-                    <button class="btn-dae">VER EXPEDIENTE</button>
-                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
-                </div>
-            </div>
-
-            <div class="request-card priority-med">
-                <div class="request-info">
-                    <h3>CAMBIO DE CARRERA INTERNO</h3>
-                    <p>Boleta: 2022640555 • Alumno: Ruiz M. • Promedio: 8.9</p>
-                </div>
-                <div>
-                    <button class="btn-dae">VER EXPEDIENTE</button>
-                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
-                </div>
-            </div>
-
-            <div class="request-card">
-                <div class="request-info">
-                    <h3>RECURSE DE MATERIA (3RA OPORTUNIDAD)</h3>
-                    <p>Boleta: 2021000999 • Alumno: Diaz L. • Materia: Ecuaciones Dif.</p>
-                </div>
-                <div>
-                    <button class="btn-dae">VER EXPEDIENTE</button>
-                    <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
-                </div>
+            <div id="requests-container">
+                <!-- pending requests will be injected here -->
             </div>
 
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script src="../js/dae-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                const pending = await fetchPendingRequests();
+                const container = document.getElementById('requests-container');
+                if (pending.length === 0) {
+                    container.innerHTML = '<p style="color: #ccc;">No hay solicitudes pendientes.</p>';
+                } else {
+                    pending.forEach(req => {
+                        const card = document.createElement('div');
+                        card.className = 'request-card';
+                        if (req.priority === 'high') card.classList.add('priority-high');
+                        else if (req.priority === 'med') card.classList.add('priority-med');
+                        card.innerHTML = `
+                            <div class="request-info">
+                                <h3>${req.title}</h3>
+                                <p>${req.detail}</p>
+                            </div>
+                            <div>
+                                <button class="btn-dae">VER EXPEDIENTE</button>
+                                <button class="btn-dae" style="background: var(--dae-primary); color: white;">APROBAR</button>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            } catch(e) { console.error('Error loading pending requests', e); }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAES Cloud — API Reference</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f1117;
+      --surface:   #181c27;
+      --surface2:  #1e2336;
+      --border:    #2a2f45;
+      --text:      #c9d1e0;
+      --muted:     #6b7592;
+      --accent:    #4f8ef7;
+      --accent2:   #7c5cfc;
+
+      --get:       #22c55e;
+      --get-bg:    #0d2a1a;
+      --post:      #3b82f6;
+      --post-bg:   #0d1e3a;
+      --put:       #f59e0b;
+      --put-bg:    #2a1d00;
+      --delete:    #ef4444;
+      --delete-bg: #2a0d0d;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 230px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 0;
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .sidebar-logo h1 { font-size: 15px; font-weight: 700; color: #fff; }
+    .sidebar-logo p  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .sidebar nav a {
+      display: block;
+      padding: 7px 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(79,142,247,.07);
+    }
+    .sidebar nav .nav-section {
+      padding: 14px 20px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Main ── */
+    .main { flex: 1; min-width: 0; padding: 48px 56px; max-width: 960px; }
+
+    h2.section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* ── Quickstart ── */
+    .qs-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .qs-card h2 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .qs-card .qs-sub { color: var(--muted); margin-bottom: 24px; font-size: 13px; }
+
+    .qs-steps { display: flex; flex-direction: column; gap: 20px; }
+    .qs-step {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .qs-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .qs-step h4 { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+
+    pre.code {
+      background: #0a0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      color: #abb2bf;
+    }
+    .code .cm  { color: var(--muted); }
+    .code .kw  { color: #c678dd; }
+    .code .str { color: #98c379; }
+    .code .var { color: #e06c75; }
+    .code .num { color: #d19a66; }
+    .code .key { color: #56b6c2; }
+
+    .qs-note {
+      background: rgba(79,142,247,.08);
+      border: 1px solid rgba(79,142,247,.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #8ab4f8;
+      margin-top: 8px;
+    }
+
+    /* ── Roles table ── */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .role-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .role-chip .role-name {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 4px;
+    }
+    .role-chip .role-perms { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── Service block ── */
+    .service-block { margin-bottom: 52px; }
+    .service-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .service-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .badge-cross    { background: rgba(124,92,252,.2); color: #a78bfa; }
+    .badge-business { background: rgba(79,142,247,.2); color: #93c5fd; }
+
+    .service-title  { font-size: 17px; font-weight: 700; color: #fff; }
+    .service-port   { font-size: 11px; color: var(--muted); margin-left: auto; font-family: monospace; }
+
+    /* ── Endpoint row ── */
+    .endpoint {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .endpoint-header {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .endpoint-header:hover { background: var(--surface2); }
+
+    .method {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 0;
+      border-radius: 4px;
+      text-align: center;
+      letter-spacing: .04em;
+    }
+    .m-get    { color: var(--get);    background: var(--get-bg); }
+    .m-post   { color: var(--post);   background: var(--post-bg); }
+    .m-put    { color: var(--put);    background: var(--put-bg); }
+    .m-delete { color: var(--delete); background: var(--delete-bg); }
+
+    .path {
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 13px;
+      color: #e2e8f0;
+    }
+    .path .param { color: #fbbf24; }
+
+    .endpoint-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tag-auth     { background: rgba(239,68,68,.15); color: #f87171; }
+    .tag-perm     { background: rgba(245,158,11,.15); color: #fbbf24; }
+    .tag-open     { background: rgba(34,197,94,.15);  color: #4ade80; }
+    .tag-ratelim  { background: rgba(124,92,252,.15); color: #c084fc; }
+
+    .endpoint-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .endpoint-body.open { display: block; }
+
+    .endpoint-desc { color: var(--muted); font-size: 13px; margin: 12px 0 10px; }
+
+    .params-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    .params-table th {
+      text-align: left;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      border-bottom: 1px solid var(--border);
+    }
+    .params-table td { padding: 7px 10px; border-bottom: 1px solid rgba(42,47,69,.5); vertical-align: top; }
+    .params-table tr:last-child td { border-bottom: none; }
+    .params-table .pname { font-family: monospace; color: #93c5fd; }
+    .params-table .ptype { color: var(--muted); }
+    .params-table .preq  { color: #f87171; font-size: 10px; font-weight: 700; }
+    .params-table .popt  { color: var(--muted); font-size: 10px; }
+
+    .resp-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 6px; }
+
+    /* ── Section anchor ── */
+    section { scroll-margin-top: 24px; }
+
+    /* ── Base URL banner ── */
+    .baseurl-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-family: monospace;
+      font-size: 13px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .baseurl-label { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .baseurl-val   { color: var(--accent); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ══════════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>SAES Cloud</h1>
+      <p>API Reference · MVP v1</p>
+    </div>
+    <nav>
+      <a href="#quickstart">Quickstart</a>
+      <div class="nav-section">Transversales</div>
+      <a href="#auth">Autenticación</a>
+      <a href="#permissions">Permisos</a>
+      <a href="#users">Usuarios</a>
+      <div class="nav-section">Negocio</div>
+      <a href="#catalog">Catálogo</a>
+      <a href="#schedule">Horarios</a>
+      <a href="#enrollments">Inscripciones</a>
+      <a href="#grades">Calificaciones</a>
+    </nav>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- Base URL -->
+    <div class="baseurl-bar">
+      <span class="baseurl-label">Base URL</span>
+      <span class="baseurl-val">${API_BASE_URL}</span>
+    </div>
+
+    <!-- ────────────────────────────────────────────────
+         QUICKSTART
+    ──────────────────────────────────────────────── -->
+    <section id="quickstart">
+      <div class="qs-card">
+        <h2>Quickstart</h2>
+        <p class="qs-sub">Empieza a consumir la API en 3 pasos.</p>
+
+        <div class="qs-steps">
+
+          <!-- Paso 1 -->
+          <div class="qs-step">
+            <div class="qs-num">1</div>
+            <div>
+              <h4>Inicia sesión</h4>
+              <pre class="code"><span class="cm"># POST /api/auth/login</span>
+curl -s -X POST ${API_BASE_URL}/api/auth/login \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"identifier":"2023630001","password":"TuPassword"}'</span>
+
+<span class="cm"># Respuesta:</span>
+{
+  <span class="key">"access_token"</span>:  <span class="str">"0f7315de55b6c55c45d8d3c7..."</span>,
+  <span class="key">"refresh_token"</span>: <span class="str">"1410928e5aaa52b378a489b5..."</span>,
+  <span class="key">"expira_en"</span>:     <span class="num">900</span>
+}</pre>
+              <p class="qs-note">
+                <strong>identifier</strong> es la boleta para alumnos y el num_empleado para docentes.
+                El <strong>access_token</strong> expira en 15 min; usa <code>/api/auth/refresh</code> para renovarlo.
+              </p>
+            </div>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="qs-step">
+            <div class="qs-num">2</div>
+            <div>
+              <h4>Obtén tu identidad</h4>
+              <pre class="code"><span class="cm"># GET /api/users/me  — conoce tu id_alumno / id_docente</span>
+curl -s ${API_BASE_URL}/api/users/me \
+  -H <span class="str">"Authorization: Bearer &lt;access_token&gt;"</span>
+
+<span class="cm"># Respuesta:</span>
+{
+  <span class="key">"id_usuario"</span>: <span class="num">4</span>,
+  <span class="key">"rol"</span>:        <span class="str">"alumno"</span>,
+  <span class="key">"id_alumno"</span>:  <span class="num">1</span>,
+  <span class="key">"id_docente"</span>: <span class="kw">null</span>
+}</pre>
+              <p class="qs-note">
+                Necesitarás <strong>id_alumno</strong> para consultar grupos disponibles y calificaciones.
+              </p>
+            </div>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="qs-step">
+            <div class="qs-num">3</div>
+            <div>
+              <h4>Consulta y opera</h4>
+              <pre class="code"><span class="cm"># Ejemplo alumno: ver grupos disponibles en el período activo</span>
+curl -s <span class="str">"${API_BASE_URL}/api/enrollments/groups/available?period=2025-1&amp;student=1"</span> \
+  -H <span class="str">"Authorization: Bearer &lt;access_token&gt;"</span>
+
+<span class="cm"># Inscribirse a un grupo</span>
+curl -s -X POST ${API_BASE_URL}/api/enrollments/enrollments \
+  -H <span class="str">"Authorization: Bearer &lt;access_token&gt;"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"id_grupo":1,"tipo":"Ordinaria"}'</span>
+
+<span class="cm"># Ejemplo docente: ver calificaciones de su grupo</span>
+curl -s ${API_BASE_URL}/api/grades/grades/groups/1 \
+  -H <span class="str">"Authorization: Bearer &lt;access_token&gt;"</span></pre>
+            </div>
+          </div>
+
+        </div><!-- /qs-steps -->
+
+        <!-- Roles rápidos -->
+        <p style="margin-top:28px;margin-bottom:12px;font-weight:600;color:#fff;font-size:13px;">Roles y permisos</p>
+        <div class="roles-grid">
+          <div class="role-chip">
+            <div class="role-name" style="color:#4ade80;">alumno</div>
+            <div class="role-perms">Inscribir/dar baja grupos · Ver calificaciones propias</div>
+          </div>
+          <div class="role-chip">
+            <div class="role-name" style="color:#60a5fa;">docente</div>
+            <div class="role-perms">Capturar calificaciones · Ver lista de alumnos por grupo</div>
+          </div>
+          <div class="role-chip">
+            <div class="role-name" style="color:#f472b6;">dae</div>
+            <div class="role-perms">Crear alumnos/docentes · Crear materias · Cambiar carrera</div>
+          </div>
+          <div class="role-chip">
+            <div class="role-name" style="color:#fb923c;">gestion</div>
+            <div class="role-perms">Crear grupos/horarios · Asignar docentes · Iniciar semestre</div>
+          </div>
+          <div class="role-chip">
+            <div class="role-name" style="color:#a78bfa;">root</div>
+            <div class="role-perms">Acceso total a todos los endpoints</div>
+          </div>
+        </div>
+
+      </div><!-- /qs-card -->
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-AUTH
+    ════════════════════════════════════════════════ -->
+    <section id="auth">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-cross">Cross</span>
+          <span class="service-title">Autenticación</span>
+          <span class="service-port">/api/auth/ &nbsp;·&nbsp; :9001</span>
+        </div>
+
+        <!-- POST /login -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/auth/login</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-open">Sin auth</span>
+              <span class="tag tag-ratelim">Rate limit 10/min</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Autentica un usuario y devuelve access_token (15 min) y refresh_token (7 días).</p>
+            <div class="resp-title">Body</div>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">identifier</td><td class="ptype">string</td><td class="preq">requerido</td><td>Boleta (alumno) o num_empleado (docente)</td></tr>
+              <tr><td class="pname">password</td><td class="ptype">string</td><td class="preq">requerido</td><td>Contraseña en texto plano</td></tr>
+            </table>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"access_token"</span>: <span class="str">"..."</span>, <span class="key">"refresh_token"</span>: <span class="str">"..."</span>, <span class="key">"expira_en"</span>: <span class="num">900</span> }</pre>
+          </div>
+        </div>
+
+        <!-- POST /logout -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/auth/logout</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Invalida la sesión activa asociada al access_token del header.</p>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"message"</span>: <span class="str">"sesión cerrada"</span> }</pre>
+          </div>
+        </div>
+
+        <!-- POST /refresh -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/auth/refresh</span>
+            <div class="endpoint-meta"><span class="tag tag-open">Sin auth</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Genera un nuevo access_token a partir de un refresh_token válido.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">refresh_token</td><td class="ptype">string</td><td class="preq">requerido</td><td>Refresh token obtenido en /login</td></tr>
+            </table>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"access_token"</span>: <span class="str">"..."</span>, <span class="key">"expira_en"</span>: <span class="num">900</span> }</pre>
+          </div>
+        </div>
+
+        <!-- GET /sessions -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/auth/sessions</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista todas las sesiones activas del usuario autenticado.</p>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">[ { <span class="key">"id"</span>: <span class="str">"..."</span>, <span class="key">"creada_en"</span>: <span class="str">"..."</span>, <span class="key">"expira_acceso"</span>: <span class="str">"..."</span>, <span class="key">"dispositivo"</span>: {...} } ]</pre>
+          </div>
+        </div>
+
+        <!-- DELETE /sessions/{id} -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-delete">DELETE</span>
+            <span class="path">/api/auth/sessions/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Cierra una sesión específica del usuario autenticado (logout en otro dispositivo).</p>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"message"</span>: <span class="str">"sesión cerrada"</span> }</pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-PERMISSIONS
+    ════════════════════════════════════════════════ -->
+    <section id="permissions">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-cross">Cross</span>
+          <span class="service-title">Permisos</span>
+          <span class="service-port">/api/permissions/ &nbsp;·&nbsp; :9002</span>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/permissions/roles/<span class="param">{role}</span>/permissions</span>
+            <div class="endpoint-meta"><span class="tag tag-open">Sin auth</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista los permisos asignados a un rol. Roles válidos: <code>alumno</code>, <code>docente</code>, <code>dae</code>, <code>gestion</code>, <code>perfil</code>, <code>sub</code>, <code>root</code>.</p>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"role"</span>: <span class="str">"alumno"</span>, <span class="key">"permissions"</span>: [<span class="str">"inscribir_grupo"</span>, <span class="str">"baja_grupo"</span>, ...] }</pre>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/permissions/actions</span>
+            <div class="endpoint-meta"><span class="tag tag-open">Sin auth</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Catálogo completo de acciones del sistema con descripción y rol que las tiene.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-USERS
+    ════════════════════════════════════════════════ -->
+    <section id="users">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-cross">Cross</span>
+          <span class="service-title">Usuarios</span>
+          <span class="service-port">/api/users/ &nbsp;·&nbsp; :9003</span>
+        </div>
+
+        <!-- GET /me -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/users/me</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Devuelve la identidad del usuario autenticado. Útil para obtener <code>id_alumno</code> o <code>id_docente</code> sin consultas adicionales.</p>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"id_usuario"</span>: <span class="num">4</span>, <span class="key">"rol"</span>: <span class="str">"alumno"</span>, <span class="key">"id_alumno"</span>: <span class="num">1</span>, <span class="key">"id_docente"</span>: <span class="kw">null</span> }</pre>
+          </div>
+        </div>
+
+        <!-- POST /students -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/users/students</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">crear_alumno</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Da de alta un alumno y crea su usuario en el sistema.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">boleta</td><td class="ptype">string</td><td class="preq">requerido</td><td>Boleta única (ej. 2023630001)</td></tr>
+              <tr><td class="pname">nombre</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">apellido_paterno</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">apellido_materno</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">curp</td><td class="ptype">string</td><td class="preq">requerido</td><td>18 caracteres</td></tr>
+              <tr><td class="pname">correo_institucional</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">correo_personal</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">telefono</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">fecha_nacimiento</td><td class="ptype">string</td><td class="preq">requerido</td><td>YYYY-MM-DD</td></tr>
+              <tr><td class="pname">sexo</td><td class="ptype">enum</td><td class="preq">requerido</td><td>M | F | NB</td></tr>
+              <tr><td class="pname">id_carrera</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">turno</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Matutino | Vespertino</td></tr>
+              <tr><td class="pname">semestre_actual</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">fecha_ingreso</td><td class="ptype">string</td><td class="preq">requerido</td><td>YYYY-MM-DD</td></tr>
+              <tr><td class="pname">password</td><td class="ptype">string</td><td class="preq">requerido</td><td>Contraseña inicial</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- GET /students -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/users/students</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista alumnos con paginación y filtros.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_carrera</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">situacion</td><td class="ptype">string</td><td class="popt">opcional</td><td>Regular | Irregular | Baja Temporal | Baja Definitiva | Egresado | Titulado</td></tr>
+              <tr><td class="pname">turno</td><td class="ptype">string</td><td class="popt">opcional</td><td>Matutino | Vespertino</td></tr>
+              <tr><td class="pname">page</td><td class="ptype">int</td><td class="popt">opcional</td><td>Default 1</td></tr>
+              <tr><td class="pname">limit</td><td class="ptype">int</td><td class="popt">opcional</td><td>Default 50, máx 200</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- GET /students/{id} -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/users/students/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle completo de un alumno por <code>id_alumno</code>.</p>
+          </div>
+        </div>
+
+        <!-- PUT /students/{id} -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/users/students/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Actualiza campos del alumno. Campos modificables: <code>nombre</code>, <code>apellido_paterno</code>, <code>apellido_materno</code>, <code>correo_institucional</code>, <code>correo_personal</code>, <code>telefono</code>, <code>turno</code>, <code>situacion</code>, <code>semestre_actual</code>.</p>
+          </div>
+        </div>
+
+        <!-- PUT /students/{id}/career -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/users/students/<span class="param">{id}</span>/career</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">cambiar_carrera_alumno</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Cambia la carrera y semestre de un alumno. Invalida todas sus sesiones activas.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_carrera</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">semestre_actual</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- POST /teachers -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/users/teachers</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">crear_docente</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Da de alta un docente y crea su usuario en el sistema.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">num_empleado</td><td class="ptype">string</td><td class="preq">requerido</td><td>Número único de empleado</td></tr>
+              <tr><td class="pname">nombre</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">apellido_paterno</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">apellido_materno</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">correo_institucional</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">telefono</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">tipo_contrato</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Base | Confianza | Honorarios</td></tr>
+              <tr><td class="pname">categoria</td><td class="ptype">string</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">password</td><td class="ptype">string</td><td class="preq">requerido</td><td>Contraseña inicial</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- GET /teachers -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/users/teachers</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista docentes con filtros.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">tipo_contrato</td><td class="ptype">string</td><td class="popt">opcional</td><td>Base | Confianza | Honorarios</td></tr>
+              <tr><td class="pname">activo</td><td class="ptype">bool</td><td class="popt">opcional</td><td>true (default) | false</td></tr>
+              <tr><td class="pname">page / limit</td><td class="ptype">int</td><td class="popt">opcional</td><td>Paginación</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- GET /teachers/{id} -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/users/teachers/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de un docente por <code>id_docente</code>.</p>
+          </div>
+        </div>
+
+        <!-- PUT /teachers/{id} -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/users/teachers/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Actualiza campos del docente: <code>nombre</code>, <code>apellido_paterno</code>, <code>apellido_materno</code>, <code>correo_institucional</code>, <code>telefono</code>, <code>tipo_contrato</code>, <code>categoria</code>, <code>activo</code>.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-CATALOG
+    ════════════════════════════════════════════════ -->
+    <section id="catalog">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-business">Business</span>
+          <span class="service-title">Catálogo</span>
+          <span class="service-port">/api/catalog/ &nbsp;·&nbsp; :8081</span>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/careers</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista carreras activas. Pasar <code>?activa=false</code> para incluir inactivas.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/careers/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de una carrera.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/careers</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">root</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Crea una nueva carrera.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">clave</td><td class="ptype">string</td><td class="preq">requerido</td><td>Ej. ISIST</td></tr>
+              <tr><td class="pname">nombre</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">duracion_semestres</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-delete">DELETE</span>
+            <span class="path">/api/careers/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Desactiva una carrera (soft-delete, no la elimina).</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/subjects</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista materias con paginación.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">clave</td><td class="ptype">string</td><td class="popt">opcional</td><td>Filtrar por clave exacta</td></tr>
+              <tr><td class="pname">page / limit</td><td class="ptype">int</td><td class="popt">opcional</td><td>Paginación</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/subjects/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de una materia.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/subjects</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">crear_materia</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Agrega una materia al catálogo.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">clave</td><td class="ptype">string</td><td class="preq">requerido</td><td>Ej. MAT001</td></tr>
+              <tr><td class="pname">nombre</td><td class="ptype">string</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">creditos</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">horas_teoria</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">horas_practica</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-delete">DELETE</span>
+            <span class="path">/api/subjects/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Elimina una materia si no tiene grupos asociados.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-SCHEDULE
+    ════════════════════════════════════════════════ -->
+    <section id="schedule">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-business">Business</span>
+          <span class="service-title">Horarios</span>
+          <span class="service-port">/api/schedule/ &nbsp;·&nbsp; :8082</span>
+        </div>
+
+        <!-- Periods -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/schedule/periods</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">iniciar_semestre</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Crea un nuevo período académico. Solo puede existir un período Activo a la vez.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">clave</td><td class="ptype">string</td><td class="preq">requerido</td><td>Ej. 2025-2</td></tr>
+              <tr><td class="pname">fecha_inicio</td><td class="ptype">string</td><td class="preq">requerido</td><td>YYYY-MM-DD</td></tr>
+              <tr><td class="pname">fecha_fin</td><td class="ptype">string</td><td class="preq">requerido</td><td>YYYY-MM-DD</td></tr>
+              <tr><td class="pname">tipo</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Ordinario | Especial</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/periods</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista todos los períodos. Filtrar con <code>?estado=Activo</code> | <code>Proximo</code> | <code>Cerrado</code>.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/periods/active</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Devuelve el período activo actual. 404 si no hay ninguno activo.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/periods/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de un período por ID.</p>
+          </div>
+        </div>
+
+        <!-- Groups -->
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/schedule/groups</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">crear_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Crea un grupo para una materia en un período. El período no puede estar Cerrado.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_materia</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">id_periodo</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">clave_grupo</td><td class="ptype">string</td><td class="preq">requerido</td><td>Ej. A, B, C1</td></tr>
+              <tr><td class="pname">cupo_max</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">turno</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Matutino | Vespertino</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/groups</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista grupos con cupo e información de materia. Incluye <code>inscritos</code> y <code>cupo_disponible</code>.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_periodo</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">id_materia</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">turno</td><td class="ptype">string</td><td class="popt">opcional</td><td>Matutino | Vespertino</td></tr>
+              <tr><td class="pname">id_docente</td><td class="ptype">int</td><td class="popt">opcional</td><td>Solo grupos asignados a ese docente</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/groups/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de un grupo incluyendo docente asignado, cupo e inscritos.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/schedule/groups/<span class="param">{id}</span>/teacher</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">asignar_docente_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Asigna (o reasigna) un docente a un grupo.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_docente</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/schedule/groups/<span class="param">{id}</span>/schedules</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">crear_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Agrega una franja horaria a un grupo (puede llamarse múltiples veces para días distintos).</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">dia</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Lunes | Martes | Miercoles | Jueves | Viernes | Sabado</td></tr>
+              <tr><td class="pname">hora_inicio</td><td class="ptype">string</td><td class="preq">requerido</td><td>HH:MM</td></tr>
+              <tr><td class="pname">hora_fin</td><td class="ptype">string</td><td class="preq">requerido</td><td>HH:MM</td></tr>
+              <tr><td class="pname">aula_desc</td><td class="ptype">string</td><td class="preq">requerido</td><td>Ej. B-204</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/groups/<span class="param">{id}</span>/schedules</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista todas las franjas horarias de un grupo ordenadas por día y hora.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/classrooms/availability</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Devuelve las aulas ocupadas en un bloque horario dado.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">dia</td><td class="ptype">string</td><td class="preq">requerido</td><td>Lunes | Martes | ...</td></tr>
+              <tr><td class="pname">hora_inicio</td><td class="ptype">string</td><td class="preq">requerido</td><td>HH:MM</td></tr>
+              <tr><td class="pname">hora_fin</td><td class="ptype">string</td><td class="preq">requerido</td><td>HH:MM</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/schedule/schedules/conflicts</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detecta pares de grupos con conflicto de aula y horario en un período.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_periodo</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-ENROLLMENTS
+    ════════════════════════════════════════════════ -->
+    <section id="enrollments">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-business">Business</span>
+          <span class="service-title">Inscripciones</span>
+          <span class="service-port">/api/enrollments/ &nbsp;·&nbsp; :8083</span>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/enrollments/groups/available</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">ver_grupos_disponibles</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Grupos con cupo disponible en un período, marcando conflictos de horario con las inscripciones actuales del alumno.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">period</td><td class="ptype">string</td><td class="preq">requerido</td><td>Clave del período, ej. 2025-1</td></tr>
+              <tr><td class="pname">student</td><td class="ptype">int</td><td class="preq">requerido</td><td>id_alumno (obtener de <code>/api/users/me</code>)</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/enrollments/enrollments</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">inscribir_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Inscribe al alumno autenticado en un grupo. Valida cupo, conflicto de horario y situación del alumno.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_grupo</td><td class="ptype">int</td><td class="preq">requerido</td><td></td></tr>
+              <tr><td class="pname">tipo</td><td class="ptype">enum</td><td class="preq">requerido</td><td>Ordinaria | Reinscripcion</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/enrollments/enrollments</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista inscripciones. Los alumnos solo ven las propias; otros roles pueden filtrar por <code>?id_alumno</code>.</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_alumno</td><td class="ptype">int</td><td class="popt">opcional</td><td>Solo roles no-alumno</td></tr>
+              <tr><td class="pname">id_grupo</td><td class="ptype">int</td><td class="popt">opcional</td><td></td></tr>
+              <tr><td class="pname">estado</td><td class="ptype">string</td><td class="popt">opcional</td><td>Activa | Baja | Rechazada</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/enrollments/enrollments/<span class="param">{id}</span></span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Detalle de una inscripción. Alumno solo puede ver las propias.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-delete">DELETE</span>
+            <span class="path">/api/enrollments/enrollments/<span class="param">{id}</span></span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">baja_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Da de baja al alumno de un grupo. Solo disponible si el período aún no ha iniciado y la selección no está confirmada.</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-post">POST</span>
+            <span class="path">/api/enrollments/enrollments/confirm</span>
+            <div class="endpoint-meta"><span class="tag tag-auth">Bearer</span></div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Confirma la selección de horario del alumno autenticado. Congela las inscripciones activas del período actual (impide nuevas bajas).</p>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/enrollments/enrollments/<span class="param">{id}</span>/group</span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">cambiar_alumno_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Mueve un alumno a otro grupo de la misma materia. Requiere cupo en el grupo destino.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_grupo</td><td class="ptype">int</td><td class="preq">requerido</td><td>Grupo destino</td></tr>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         API-GRADES
+    ════════════════════════════════════════════════ -->
+    <section id="grades">
+      <div class="service-block">
+        <div class="service-header">
+          <span class="service-badge badge-business">Business</span>
+          <span class="service-title">Calificaciones</span>
+          <span class="service-port">/api/grades/ &nbsp;·&nbsp; :8084</span>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-put">PUT</span>
+            <span class="path">/api/grades/grades/<span class="param">{enrollmentId}</span></span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">registrar_calificacion</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Registra o actualiza parciales de un alumno en una inscripción. Solo el docente asignado al grupo puede capturar. Calcula <code>definitiva</code> y <code>acreditada</code> automáticamente.</p>
+            <table class="params-table">
+              <tr><th>Campo</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">parcial_1</td><td class="ptype">float</td><td class="popt">opcional</td><td>0.0 – 10.0</td></tr>
+              <tr><td class="pname">parcial_2</td><td class="ptype">float</td><td class="popt">opcional</td><td>0.0 – 10.0</td></tr>
+              <tr><td class="pname">parcial_3</td><td class="ptype">float</td><td class="popt">opcional</td><td>0.0 – 10.0</td></tr>
+            </table>
+            <div class="resp-title">Respuesta 200</div>
+            <pre class="code">{ <span class="key">"parcial_1"</span>: <span class="num">8.5</span>, <span class="key">"parcial_2"</span>: <span class="num">7.0</span>, <span class="key">"parcial_3"</span>: <span class="kw">null</span>, <span class="key">"definitiva"</span>: <span class="num">7.8</span>, <span class="key">"acreditada"</span>: <span class="kw">true</span> }</pre>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/grades/grades/students/<span class="param">{id}</span></span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">ver_calificaciones_propias</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Historial de calificaciones de un alumno. Los alumnos solo pueden consultar las propias (<code>id</code> = su <code>id_alumno</code>).</p>
+            <table class="params-table">
+              <tr><th>Query param</th><th>Tipo</th><th></th><th>Descripción</th></tr>
+              <tr><td class="pname">id_periodo</td><td class="ptype">int</td><td class="popt">opcional</td><td>Filtrar por período</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="endpoint">
+          <div class="endpoint-header" onclick="toggle(this)">
+            <span class="method m-get">GET</span>
+            <span class="path">/api/grades/grades/groups/<span class="param">{id}</span></span>
+            <div class="endpoint-meta">
+              <span class="tag tag-auth">Bearer</span>
+              <span class="tag tag-perm">ver_alumnos_grupo</span>
+            </div>
+          </div>
+          <div class="endpoint-body">
+            <p class="endpoint-desc">Lista de alumnos inscritos en un grupo con sus calificaciones actuales. Docentes solo pueden ver los grupos asignados a ellos.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -58,7 +58,7 @@
                     <h4>SISTEMA DE INSCRIPCIONES</h4>
                     <p>Permitir a los alumnos acceder al módulo de reinscripción.</p>
                 </div>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="switch"><input id="setting-inscriptions" type="checkbox" checked><span class="slider"></span></label>
             </div>
 
             <div class="setting-row">
@@ -66,7 +66,7 @@
                     <h4>CAPTURA DE CALIFICACIONES</h4>
                     <p>Habilitar portal de profesores para subir actas.</p>
                 </div>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                <label class="switch"><input id="setting-grades" type="checkbox"><span class="slider"></span></label>
             </div>
 
             <div class="setting-row">
@@ -74,7 +74,7 @@
                     <h4>EVALUACIÓN DOCENTE</h4>
                     <p>Activar encuestas obligatorias para alumnos.</p>
                 </div>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                <label class="switch"><input id="setting-eval" type="checkbox" checked><span class="slider"></span></label>
             </div>
 
             <div style="margin-top: 30px;">
@@ -82,17 +82,50 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div>
                         <label style="font-size: 0.7rem; color: var(--dae-primary); display: block; margin-bottom: 5px;">PERIODO ACTUAL</label>
-                        <input type="text" value="2025-1" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
+                        <input id="setting-period" type="text" value="2025-1" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
                     </div>
                     <div>
                         <label style="font-size: 0.7rem; color: var(--dae-primary); display: block; margin-bottom: 5px;">FECHA DE CIERRE</label>
-                        <input type="date" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
+                        <input id="setting-close" type="date" style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: white; border-radius: 6px;">
                     </div>
                 </div>
                 <button class="btn-dae" style="margin-top: 20px; background: var(--dae-primary); color: white;">GUARDAR CAMBIOS</button>
             </div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script src="../js/dae-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                // load settings if backend supports
+                const cfg = await apiFetch(`${API_BASE_URL}/saes-cloud-api/api/config`);
+                document.getElementById('setting-inscriptions').checked = cfg.allow_inscriptions;
+                document.getElementById('setting-grades').checked = cfg.allow_grades;
+                document.getElementById('setting-eval').checked = cfg.allow_evaluation;
+                document.getElementById('setting-period').value = cfg.current_period || '';
+                document.getElementById('setting-close').value = cfg.closing_date || '';
+            } catch(e) {
+                console.warn('could not load settings', e);
+            }
+
+            document.querySelector('.btn-dae').addEventListener('click', async () => {
+                const newCfg = {
+                    allow_inscriptions: document.getElementById('setting-inscriptions').checked,
+                    allow_grades: document.getElementById('setting-grades').checked,
+                    allow_evaluation: document.getElementById('setting-eval').checked,
+                    current_period: document.getElementById('setting-period').value,
+                    closing_date: document.getElementById('setting-close').value,
+                };
+                try {
+                    await saveSettings(newCfg);
+                    alert('Configuración guardada');
+                } catch(err) { console.error('save settings failed', err); alert('Error guardando configuración'); }
+            });
+        });
+    </script>
 </body>
 </html>

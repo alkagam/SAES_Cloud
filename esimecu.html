@@ -103,6 +103,13 @@
         </div>
         <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.6rem; opacity: 0.3;">ENCRIPTACIÓN: AES-256 // ESTADO: SEGURO</div>
     </main>
+    <script src="js/api-config.js"></script>
+    <script src="js/catalog-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+        });
+    </script>
     <script>
         document.getElementById('login-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -112,7 +119,8 @@
             errorDiv.style.display = 'none';
 
             try {
-                const response = await fetch('/saes-cloud-api/api/login', {
+                const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/login`;
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ identifier, password })
@@ -124,6 +132,12 @@
                     // Guardar tokens para futuras peticiones
                     sessionStorage.setItem('accessToken', data.access_token);
                     sessionStorage.setItem('refreshToken', data.refresh_token);
+                    sessionStorage.setItem('userRole', data.rol);
+
+                    // NOTA: Asumimos que la respuesta del login también incluye id_alumno para los estudiantes.
+                    if (data.id_alumno) {
+                        sessionStorage.setItem('studentId', data.id_alumno);
+                    }
                     
                     // Redirigir según el rol
                     switch (data.rol) {

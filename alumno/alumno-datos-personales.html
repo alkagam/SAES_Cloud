@@ -16,7 +16,10 @@
         .form-group label { font-size: 0.7rem; color: var(--neon-green); opacity: 0.7; margin-bottom: 8px; display: block; }
         .form-group input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: white; }
         .form-group input:focus { outline: none; border-color: var(--neon-green); }
-        .form-group input[readonly] { background: transparent; border-color: transparent; color: rgba(255,255,255,0.5); cursor: not-allowed; }
+        .form-group input[readonly] { background: rgba(0,0,0,0.1); border-color: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); cursor: not-allowed; }
+        .form-result { margin-top: 15px; padding: 10px; border-radius: 8px; display: none; font-size: 0.8rem; }
+        .form-result.success { background-color: rgba(0, 255, 136, 0.1); border: 1px solid var(--neon-green); color: var(--neon-green); }
+        .form-result.error { background-color: rgba(255, 0, 85, 0.1); border: 1px solid #ff0055; color: #ff0055; }
     </style>
 </head>
 <body class="dashboard-layout">
@@ -51,7 +54,7 @@
 
         <div class="glass-widget wide-widget">
             <div class="widget-header">FORMULARIO DE DATOS</div>
-            <form>
+            <form id="personal-data-form">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="nombre">NOMBRE COMPLETO</label>
@@ -82,8 +85,114 @@
                     <button type="submit" class="btn-outline-cyan">GUARDAR CAMBIOS</button>
                 </div>
             </form>
+            <div id="form-result" class="form-result"></div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
     <script src="../js/sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const form = document.getElementById('personal-data-form');
+            const resultDiv = document.getElementById('form-result');
+            const nombreInput = document.getElementById('nombre');
+            const curpInput = document.getElementById('curp');
+            const nacimientoInput = document.getElementById('nacimiento');
+            const emailInput = document.getElementById('email');
+            const telefonoInput = document.getElementById('telefono');
+            const direccionInput = document.getElementById('direccion');
+
+            const accessToken = sessionStorage.getItem('accessToken');
+            const studentId = sessionStorage.getItem('studentId');
+
+            // Función para mostrar mensajes
+            const showMessage = (message, isError = false) => {
+                resultDiv.textContent = message;
+                resultDiv.className = `form-result ${isError ? 'error' : 'success'}`;
+                resultDiv.style.display = 'block';
+            };
+
+            // 1. Cargar datos del alumno al iniciar la página
+            const loadStudentData = async () => {
+                if (!accessToken || !studentId) {
+                    showMessage('No se pudo verificar la sesión. Por favor, inicie sesión de nuevo.', true);
+                    // Opcional: Redirigir al login
+                    // setTimeout(() => window.location.href = '../esimecu.html', 3000);
+                    return;
+                }
+
+                const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/students/${studentId}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `Error ${response.status}`);
+                    }
+
+                    const student = await response.json();
+
+                    // Poblar el formulario con los datos de la API
+                    nombreInput.value = `${student.nombre || ''} ${student.apellido_paterno || ''} ${student.apellido_materno || ''}`.trim();
+                    emailInput.value = student.correo_institucional || '';
+                    telefonoInput.value = student.telefono || '';
+                    
+                    // NOTA: La API actual (GET /students/{id}) no devuelve CURP, fecha de nacimiento ni dirección.
+                    // Se dejan los valores de placeholder.
+                    if (student.curp) curpInput.value = student.curp;
+                    if (student.fecha_nacimiento) nacimientoInput.value = student.fecha_nacimiento;
+
+                } catch (error) {
+                    showMessage(`Error al cargar los datos: ${error.message}`, true);
+                }
+            };
+
+            // 2. Guardar cambios al enviar el formulario
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                resultDiv.style.display = 'none';
+
+                const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/students/${studentId}`;
+                const payload = {
+                    // Según la API, podemos actualizar correo_institucional y telefono.
+                    // La dirección no está en el endpoint PUT /students/{id}.
+                    correo_institucional: emailInput.value,
+                    telefono: telefonoInput.value
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessToken}`
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `Error ${response.status}`);
+                    }
+
+                    showMessage('¡Datos actualizados correctamente!', false);
+
+                } catch (error) {
+                    showMessage(`Error al guardar los datos: ${error.message}`, true);
+                }
+            });
+
+            // Cargar los datos al entrar a la página
+            await loadStudentData();
+        });
+    </script>
 </body>
 </html>

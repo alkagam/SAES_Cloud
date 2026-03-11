@@ -130,6 +130,13 @@
 
         </section>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
     <script src="../js/sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+        });
+    </script>
 </body>
 </html>

@@ -92,7 +92,7 @@
         <header class="stage-header">
             <div class="header-main">
                 <h1>Dashboard de Alumno</h1>
-                <p class="mono-sub">CORE_ACCESS // CAT_A_OVERVIEW</p>
+                <p class="mono-sub" id="dashboard-subtitle">Cargando información...</p>
             </div>
             <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
                 <span class="health-label" style="opacity:0.6;">AZURE_AKS_STATUS:</span>
@@ -141,8 +141,88 @@
                 </div>
             </div>
 
+            <!-- Nuevo Widget para Materias (Ejemplo de Conexión a API) -->
+            <div class="glass-widget">
+                <div class="widget-header">MATERIAS DISPONIBLES</div>
+                <ul id="materias-list" class="action-list" style="max-height: 150px; overflow-y: auto;">
+                    <li style="opacity: 0.6;">Cargando materias...</li>
+                </ul>
+            </div>
+
         </section>
     </main>
+    <script src="../js/api-config.js"></script>
     <script src="../js/sidebar-loader.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dashboardSubtitle = document.getElementById('dashboard-subtitle');
+            const materiasList = document.getElementById('materias-list');
+            const accessToken = sessionStorage.getItem('accessToken');
+            if (accessToken && dashboardSubtitle) {
+                // fetch student career
+                fetch(`${API_BASE_URL}/saes-cloud-api/api/users/me`, { headers:{ Authorization:`Bearer ${accessToken}` }})
+                    .then(r=>r.json())
+                    .then(me=>{
+                        if (me.id_alumno) {
+                            return fetch(`${API_BASE_URL}/saes-cloud-api/api/users/students/${me.id_alumno}`, { headers:{ Authorization:`Bearer ${accessToken}` } });
+                        }
+                        throw new Error('no es alumno');
+                    })
+                    .then(r=>r.json())
+                    .then(stud=> getCareerName(stud.id_carrera))
+                    .then(nombre => {
+                        if (dashboardSubtitle) dashboardSubtitle.textContent = nombre;
+                    })
+                    .catch(e=>console.warn('failed career on dashboard', e));
+            }
+            // La URL completa de tu API para este recurso, usando la variable de api-config.js
+            const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/subjects`;
+            // Obtenemos el token que se guardó al iniciar sesión
+            const accessToken = sessionStorage.getItem('accessToken');
+
+            if (!accessToken) {
+                materiasList.innerHTML = '<li><span class="badge locked">No autenticado</span></li>';
+                console.error('No se encontró accessToken en sessionStorage.');
+                return;
+            }
+
+            fetch(apiUrl, {
+                headers: {
+                    // Incluimos el token en la cabecera de autorización
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error en la red: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(apiResponse => {
+                    materiasList.innerHTML = ''; // Limpiar el mensaje "Cargando..."
+
+                    // Tu API devuelve un objeto { data: [...] }
+                    const subjects = apiResponse.data;
+
+                    if (subjects && subjects.length > 0) {
+                        subjects.forEach(materia => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                <span>${materia.nombre}</span>
+                                <span class="badge available">${materia.creditos} CRÉDITOS</span>
+                            `;
+                            materiasList.appendChild(listItem);
+                        });
+                    } else {
+                        materiasList.innerHTML = '<li>No se encontraron materias.</li>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener las materias:', error);
+                    materiasList.innerHTML = '<li><span class="badge locked">Error al cargar</span></li>';
+                });
+        });
+    </script>
 </body>
 </html>

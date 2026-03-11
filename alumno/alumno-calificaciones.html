@@ -56,55 +56,136 @@
         <header class="stage-header">
             <div class="header-main">
                 <h1>Kárdex Académico</h1>
-                <p class="mono-sub">PERIODO_ACTUAL: 2024/2 // NIVEL: 4</p>
+                <p class="mono-sub" id="period-subtitle">PERIODO_ACTUAL: CARGANDO...</p>
             </div>
             <div class="system-health" style="font-family: 'JetBrains Mono'; font-size: 0.7rem;">
                 <span class="health-label" style="opacity:0.6;">PROMEDIO SEMESTRE:</span>
-                <span class="health-value">9.2</span>
+                <span class="health-value">-.-</span>
             </div>
         </header>
 
         <div class="table-responsive">
             <table class="cyber-table">
                 <thead>
-                    <tr>
-                        <th>MATERIA</th>
-                        <th>P1</th>
-                        <th>P2</th>
-                        <th>P3</th>
-                        <th>EXTRA</th>
-                        <th>FINAL</th>
-                    </tr>
+                    <tr><th>MATERIA</th><th>P1</th><th>P2</th><th>P3</th><th>EXTRA</th><th>FINAL</th></tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>PROGRAMACIÓN ORIENTADA A OBJETOS</td>
-                        <td class="grade-pass">8</td>
-                        <td class="grade-pass">9</td>
-                        <td class="grade-pending">-</td>
-                        <td>-</td>
-                        <td class="grade-pending">PEND</td>
-                    </tr>
-                    <tr>
-                        <td>CÁLCULO VECTORIAL</td>
-                        <td class="grade-pass">10</td>
-                        <td class="grade-pass">10</td>
-                        <td class="grade-pending">-</td>
-                        <td>-</td>
-                        <td class="grade-pending">PEND</td>
-                    </tr>
-                    <tr>
-                        <td>ECUACIONES DIFERENCIALES</td>
-                        <td class="grade-fail">4</td>
-                        <td class="grade-pass">7</td>
-                        <td class="grade-pending">-</td>
-                        <td>-</td>
-                        <td class="grade-pending">PEND</td>
-                    </tr>
-                </tbody>
+                <tbody><!-- Las calificaciones se cargarán aquí dinámicamente --></tbody>
             </table>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
     <script src="../js/sidebar-loader.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tableBody = document.querySelector('.cyber-table tbody');
+            const averageSpan = document.querySelector('.system-health .health-value');
+            const periodSubtitle = document.getElementById('period-subtitle');
+
+            const accessToken = sessionStorage.getItem('accessToken');
+            const studentId = sessionStorage.getItem('studentId');
+
+            const renderRow = (grade) => {
+                const formatGrade = (g) => {
+                    if (g === null || g === undefined) return '<td class="grade-pending">-</td>';
+                    const val = parseFloat(g);
+                    const cssClass = val < 6 ? 'grade-fail' : 'grade-pass';
+                    return `<td class="${cssClass}">${val.toFixed(0)}</td>`;
+                };
+
+                const formatFinal = (g) => {
+                    if (g === null || g === undefined) return '<td class="grade-pending">PEND</td>';
+                    const val = parseFloat(g);
+                    const cssClass = val < 6 ? 'grade-fail' : 'grade-pass';
+                    return `<td class="${cssClass}">${val.toFixed(1)}</td>`;
+                };
+
+                return `
+                    <tr>
+                        <td>${grade.materia || 'N/A'}</td>
+                        ${formatGrade(grade.parcial_1)}
+                        ${formatGrade(grade.parcial_2)}
+                        ${formatGrade(grade.parcial_3)}
+                        <td>-</td> <!-- EXTRA no viene de la API -->
+                        ${formatFinal(grade.definitiva)}
+                    </tr>
+                `;
+            };
+
+            if (!accessToken || !studentId) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: #ff0055;">Error de autenticación. Por favor, inicie sesión.</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; opacity: 0.7;">Cargando calificaciones...</td></tr>';
+
+            try {
+                // 1. Obtener el periodo activo
+                const periodResponse = await fetch(`${API_BASE_URL}/saes-cloud-api/api/periods/active`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                if (!periodResponse.ok) throw new Error('No se pudo obtener el periodo académico activo.');
+                const activePeriod = await periodResponse.json();
+                const periodId = activePeriod.id_periodo;
+                if (periodSubtitle) {
+                    periodSubtitle.textContent = `PERIODO_ACTUAL: ${activePeriod.clave}`;
+                    // también mostrar carrera del alumno
+                    try {
+                        const meRes = await fetch(`${API_BASE_URL}/saes-cloud-api/api/users/me`, { headers:{ Authorization:`Bearer ${accessToken}` }});
+                        if (meRes.ok) {
+                            const me = await meRes.json();
+                            if (me.id_alumno) {
+                                const studRes = await fetch(`${API_BASE_URL}/saes-cloud-api/api/users/students/${me.id_alumno}`, { headers:{ Authorization:`Bearer ${accessToken}` }});
+                                if (studRes.ok) {
+                                    const stud = await studRes.json();
+                                    if (stud.id_carrera) {
+                                        const nombre = await getCareerName(stud.id_carrera);
+                                        periodSubtitle.textContent += ` • ${nombre}`;
+                                    }
+                                }
+                            }
+                        }
+                    } catch(e){console.warn('no se pudo cargar carrera', e);}
+                }
+
+                // 2. Obtener las calificaciones del alumno para ese periodo
+                const gradesUrl = `${API_BASE_URL}/saes-cloud-api/api/grades/students/${studentId}?id_periodo=${periodId}`;
+                const gradesResponse = await fetch(gradesUrl, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                if (!gradesResponse.ok) throw new Error('No se pudieron cargar las calificaciones desde el servidor.');
+                
+                const gradesData = await gradesResponse.json();
+                
+                if (gradesData && gradesData.length > 0) {
+                    tableBody.innerHTML = ''; // Limpiar mensaje de "Cargando..."
+                    let totalDefinitiva = 0;
+                    let countDefinitiva = 0;
+
+                    gradesData.forEach(grade => {
+                        tableBody.innerHTML += renderRow(grade);
+                        if (grade.definitiva !== null && grade.definitiva !== undefined) {
+                            totalDefinitiva += parseFloat(grade.definitiva);
+                            countDefinitiva++;
+                        }
+                    });
+                    
+                    // Actualizar el promedio del semestre
+                    if (countDefinitiva > 0 && averageSpan) {
+                        const avg = totalDefinitiva / countDefinitiva;
+                        averageSpan.textContent = avg.toFixed(2);
+                    }
+
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay calificaciones registradas para el periodo actual.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Error al cargar calificaciones:', error);
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: #ff0055;">${error.message}</td></tr>`;
+                if (periodSubtitle) periodSubtitle.textContent = `PERIODO_ACTUAL: ERROR`;
+            }
+        });
+    </script>
 </body>
 </html>

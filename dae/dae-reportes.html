@@ -87,6 +87,35 @@
             </div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script src="../js/dae-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                const resp = await fetchGroups({limit: 50});
+                const groups = resp.data;
+                groups.sort((a,b)=> (b.inscritos||0)-(a.inscritos||0));
+                const container = document.getElementById('report-groups');
+                container.innerHTML = '';
+                groups.slice(0,3).forEach(g => {
+                    const card = document.createElement('div');
+                    card.className = 'group-card';
+                    const pct = g.cupo_max ? Math.round((g.inscritos||0)/g.cupo_max*100) : 0;
+                    let color='#00ff88';
+                    if (pct>=100) color='#ff0055';
+                    else if (pct>90) color='#ffcc00';
+                    card.innerHTML = `
+                        <div class="group-header"><span>${g.clave_grupo} - ${g.id_materia}</span> <span style="color: ${color};">${pct}%</span></div>
+                        <div class="group-meta">Prof. ${g.id_docente||'---'} • Cupo: ${g.inscritos||0}/${g.cupo_max||''}</div>
+                        <div class="capacity-bar"><div class="capacity-fill" style="width: ${pct}%; background: ${color};"></div></div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch(e){console.error('Error loading report groups',e);}        
+        });
+    </script>
 </body>
 </html>

@@ -63,36 +63,38 @@
                             <th>ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="mono">ACT-2024-001</td>
-                            <td>CÁLCULO VECTORIAL</td>
-                            <td>2CV2</td>
-                            <td>ANA MARTÍNEZ</td>
-                            <td><span class="badge-status status-open">ABIERTA</span></td>
-                            <td><button class="btn-dae" style="font-size: 0.6rem;">AUDITAR</button></td>
-                        </tr>
-                        <tr>
-                            <td class="mono">ACT-2024-002</td>
-                            <td>PROGRAMACIÓN OO</td>
-                            <td>2CV4</td>
-                            <td>ROBERTO GÓMEZ</td>
-                            <td><span class="badge-status status-closed">CERRADA</span></td>
-                            <td><button class="btn-dae" style="font-size: 0.6rem;">REABRIR</button></td>
-                        </tr>
-                        <tr>
-                            <td class="mono">ACT-2024-003</td>
-                            <td>FÍSICA CLÁSICA</td>
-                            <td>1CM1</td>
-                            <td>CARLOS RUIZ</td>
-                            <td><span class="badge-status status-audit">EN REVISIÓN</span></td>
-                            <td><button class="btn-dae" style="font-size: 0.6rem;">AUTORIZAR</button></td>
-                        </tr>
+                    <tbody id="actas-body">
+                        <!-- rows will be injected via API -->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script src="../js/dae-service.js"></script>
     <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+            try {
+                const groups = await fetchGroups({});
+                const tbody = document.getElementById('actas-body');
+                tbody.innerHTML = '';
+                groups.data.forEach(g => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="mono">${g.clave_grupo || ''}</td>
+                        <td>${g.id_materia || ''}</td>
+                        <td>${g.clave_grupo || ''}</td>
+                        <td>${g.id_docente || 'N/A'}</td>
+                        <td><span class="badge-status status-open">${g.turno||''}</span></td>
+                        <td><button class="btn-dae" style="font-size: 0.6rem;">VER</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) { console.error('Error loading actas', e);}        
+        });
+    </script>
 </body>
 </html>

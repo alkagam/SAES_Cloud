@@ -46,6 +46,13 @@
         <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.6rem; opacity: 0.3;">ENCRIPTACIÓN: AES-256 // ESTADO: SEGURO</div>
     </main>
 
+    <script src="../js/api-config.js"></script>
+    <script src="../js/catalog-service.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.career-select').forEach(s => populateCareers(s));
+        });
+    </script>
     <script>
         document.getElementById('dae-login-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -57,7 +64,8 @@
             const administrativeRoles = ['dae', 'gestion', 'root', 'sub', 'perfil'];
 
             try {
-                const response = await fetch('/saes-cloud-api/api/login', {
+                const apiUrl = `${API_BASE_URL}/saes-cloud-api/api/login`;
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ identifier, password })
