@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAES Cloud | Acceso DAE</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        .login-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; flex-direction: column; position: relative; z-index: 10; }
+        .login-card { width: 100%; max-width: 400px; background: rgba(15, 15, 20, 0.6); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        .login-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, var(--guinda-bright), transparent); background-size: 200% 100%; animation: gradientMove 3s linear infinite; }
+        @keyframes gradientMove { 0% {background-position: 100% 0;} 100% {background-position: -100% 0;} }
+        .input-group { margin-bottom: 25px; position: relative; }
+        .input-field { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: 0.3s; box-sizing: border-box; }
+        .input-field:focus { outline: none; border-color: var(--guinda-bright); background: rgba(255, 0, 85, 0.05); box-shadow: 0 0 20px rgba(255, 0, 85, 0.15); }
+        .input-label { position: absolute; top: -9px; left: 15px; background: #050508; padding: 0 6px; font-size: 0.65rem; color: var(--guinda-bright); font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
+        .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #4d0019 0%, var(--guinda-bright) 100%); border: none; border-radius: 12px; color: white; font-weight: bold; letter-spacing: 2px; cursor: pointer; transition: 0.3s; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 0, 85, 0.4); }
+        .error-message { margin-top: 15px; padding: 10px; border-radius: 8px; background-color: rgba(255, 0, 85, 0.1); border: 1px solid #ff0055; color: #ff0055; font-size: 0.8rem; text-align: center; display: none; }
+        @media (max-width: 480px) { .login-card { padding: 30px 20px; width: 85%; } h1 { font-size: 1.8rem !important; letter-spacing: 2px !important; } }
+    </style>
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="glow-point"></div>
+
+    <main class="login-wrapper">
+        <div class="login-card">
+            <div style="text-align: center; margin-bottom: 35px;">
+                <h1 style="font-size: 2.5rem; margin: 0; letter-spacing: 5px; font-weight: 800; color: white;">IPN<span style="color: var(--guinda-bright); font-weight: 300;">.DAE</span></h1>
+                <p style="font-family: 'JetBrains Mono'; font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 5px;">NODO: GESTIÓN ESCOLAR</p>
+            </div>
+
+            <form id="dae-login-form">
+                <div class="input-group"><label class="input-label">ID DE EMPLEADO</label><input type="text" id="identifier" class="input-field" placeholder="999..." required></div>
+                <div class="input-group"><label class="input-label">CONTRASEÑA</label><input type="password" id="password" class="input-field" placeholder="••••••••" required></div>
+                <button type="submit" class="login-btn">ACCEDER</button>
+            </form>
+            <div id="error-message" class="error-message"></div>
+
+            <div style="margin-top: 25px; text-align: center; font-size: 0.75rem;">
+                <a href="../index.html" style="color: var(--guinda-bright); text-decoration: none;">Volver al Gateway Principal</a>
+            </div>
+        </div>
+        <div style="margin-top: 30px; font-family: 'JetBrains Mono'; font-size: 0.6rem; opacity: 0.3;">ENCRIPTACIÓN: AES-256 // ESTADO: SEGURO</div>
+    </main>
+
+    <script>
+        document.getElementById('dae-login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+
+            const administrativeRoles = ['dae', 'gestion', 'root', 'sub', 'perfil'];
+
+            try {
+                const response = await fetch('/saes-cloud-api/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (administrativeRoles.includes(data.rol)) {
+                        // Guardar tokens para futuras peticiones
+                        sessionStorage.setItem('accessToken', data.access_token);
+                        sessionStorage.setItem('refreshToken', data.refresh_token);
+                        // Redirigir al dashboard de DAE
+                        window.location.href = 'dae-alta-alumno.html';
+                    } else {
+                        errorDiv.textContent = 'Error: Acceso no autorizado para este rol.';
+                        errorDiv.style.display = 'block';
+                    }
+                } else {
+                    errorDiv.textContent = `Error: ${data.error || 'Credenciales incorrectas.'}`;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Error de red. No se pudo conectar al servidor.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+
+```
+
+### 2. Script para el Menú Lateral de DAE
+
+He creado el archivo `js/dae-sidebar-loader.js`. Este script se encargará de construir dinámicamente el menú de navegación para todas las páginas de DAE, haciendo mucho más fácil añadir nuevas opciones en el futuro.
+
+```diff
+--- /dev/null
++++ b/c/Users/saulm/Documents/SAES_Cloud-master/js/dae-sidebar-loader.js
+@@ -0,0 +1,45 @@
++document.addEventListener("DOMContentLoaded", function() {
++    const navContainer = document.querySelector('.nav-container');
++    if (!navContainer) return;
++
++    // 1. Definir la estructura del menú de DAE
++    const menuItems = [
++        {
++            title: "A. GESTIÓN DE USUARIOS",
++            links: [
++                { text: "Alta de Alumno", href: "dae-alta-alumno.html" },
++                { text: "Buscar Alumno", href: "#" }, // Placeholder
++                { text: "Alta de Docente", href: "#" }  // Placeholder
++            ]
++        },
++        {
++            title: "B. GESTIÓN ACADÉMICA",
++            links: [
++                { text: "Administrar Periodos", href: "#" }, // Placeholder
++                { text: "Administrar Grupos", href: "#" }   // Placeholder
++            ]
++        }
++    ];
++
++    // 2. Generar el HTML del menú
++    const currentFile = window.location.pathname.split("/").pop();
++    let navHTML = "";
++
++    menuItems.forEach(section => {
++        navHTML += `<div class="nav-section">`;
++        navHTML += `<p class="section-title">${section.title}</p>`;
++        
++        section.links.forEach(link => {
++            const linkFile = link.href.split("/").pop();
++            const isActive = linkFile === currentFile ? "active" : "";
++            navHTML += `<a href="${link.href}" class="nav-item ${isActive}">${link.text}</a>`;
++        });
++        
++        navHTML += `</div>`;
++    });
++
++    // 3. Inyectar el menú en el contenedor
++    navContainer.innerHTML = navHTML;
++
++    // (Aquí se podría añadir lógica para el menú hamburguesa en móvil si fuera necesario)
++});
+```
+
+### 3. Activación del Menú en la Página de "Alta de Alumno"
+
+Finalmente, he activado el nuevo script del menú en la página `dae-alta-alumno.html` que ya existía, simplemente descomentando la línea correspondiente.
+
+```diff
+--- a/c/Users/saulm/Documents/SAES_Cloud-master/dae/dae-alta-alumno.html
++++ b/c/Users/saulm/Documents/SAES_Cloud-master/dae/dae-alta-alumno.html
+@@ -102,8 +102,7 @@
+         </main>
+     </div>
+ 
+-    <!-- Aquí iría el script del sidebar de DAE -->
+-    <!-- <script src="../js/dae-sidebar-loader.js"></script> -->
++    <script src="../js/dae-sidebar-loader.js"></script>
+     <script>
+         document.getElementById('form-alta-alumno').addEventListener('submit', async function(event) {
+             event.preventDefault(); // Evitar que el formulario se envíe de la forma tradicional

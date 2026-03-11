@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAE - Alta de Alumno</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos adicionales para formularios */
+        .form-container { max-width: 900px; margin: 0 auto; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.7rem; color: var(--cyan); margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .form-group input, .form-group select { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; color: white; font-size: 0.9rem; transition: 0.3s; font-family: 'Inter', sans-serif; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--cyan); background: rgba(0, 212, 255, 0.05); outline: none; }
+        .form-actions { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--glass-border); display: flex; justify-content: flex-end; }
+        .btn-submit { background: var(--cyan); color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { box-shadow: 0 0 20px var(--cyan); transform: translateY(-2px); }
+        .form-result { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; }
+        .form-result.success { background-color: rgba(0, 255, 0, 0.1); border: 1px solid #0f0; color: #0f0; }
+        .form-result.error { background-color: rgba(255, 0, 85, 0.1); border: 1px solid #ff0055; color: #ff0055; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar (se cargará dinámicamente) -->
+        <aside class="sidebar-fixed">
+            <div class="sidebar-header">
+                <div>
+                    <span class="ipn-logo">IPN</span>
+                    <span class="esime-name">SAES Cloud</span>
+                    <span class="system-v">DAE v1.0</span>
+                </div>
+                <button class="menu-toggle">☰</button>
+            </div>
+            <div class="nav-container"></div>
+            <div class="user-mini-card">
+                <div class="user-dot"></div>
+                <span>Usuario DAE</span>
+            </div>
+            <a href="../index.html" class="btn-exit">SALIR</a>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-stage">
+            <div class="stage-header">
+                <div class="user-text">
+                    <h2>Alta de Nuevo Alumno</h2>
+                    <p>Registro en el sistema central de usuarios y perfiles.</p>
+                </div>
+            </div>
+
+            <div class="glass-widget">
+                <div class="widget-head">DATOS DEL ALUMNO</div>
+                <form id="form-alta-alumno" class="form-container">
+                    <div class="form-grid">
+                        <div class="form-group"><label for="boleta">Boleta</label><input type="text" id="boleta" name="boleta" required></div>
+                        <div class="form-group"><label for="nombre">Nombre(s)</label><input type="text" id="nombre" name="nombre" required></div>
+                        <div class="form-group"><label for="apellido_paterno">Apellido Paterno</label><input type="text" id="apellido_paterno" name="apellido_paterno" required></div>
+                        <div class="form-group"><label for="apellido_materno">Apellido Materno</label><input type="text" id="apellido_materno" name="apellido_materno"></div>
+                        <div class="form-group"><label for="curp">CURP</label><input type="text" id="curp" name="curp" required></div>
+                        <div class="form-group"><label for="fecha_nacimiento">Fecha de Nacimiento</label><input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required></div>
+                        <div class="form-group"><label for="sexo">Sexo</label><select id="sexo" name="sexo" required><option value="M">Masculino</option><option value="F">Femenino</option><option value="NB">No Binario</option></select></div>
+                        <div class="form-group"><label for="correo_institucional">Correo Institucional</label><input type="email" id="correo_institucional" name="correo_institucional" required></div>
+                        <div class="form-group"><label for="correo_personal">Correo Personal</label><input type="email" id="correo_personal" name="correo_personal"></div>
+                        <div class="form-group"><label for="telefono">Teléfono</label><input type="tel" id="telefono" name="telefono"></div>
+                        <div class="form-group"><label for="id_carrera">ID de Carrera</label><input type="number" id="id_carrera" name="id_carrera" required></div>
+                        <div class="form-group"><label for="turno">Turno</label><select id="turno" name="turno" required><option value="Matutino">Matutino</option><option value="Vespertino">Vespertino</option></select></div>
+                        <div class="form-group"><label for="semestre_actual">Semestre Actual</label><input type="number" id="semestre_actual" name="semestre_actual" required></div>
+                        <div class="form-group"><label for="fecha_ingreso">Fecha de Ingreso</label><input type="date" id="fecha_ingreso" name="fecha_ingreso" required></div>
+                        <div class="form-group"><label for="password">Contraseña Inicial</label><input type="password" id="password" name="password" required></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">CREAR ALUMNO</button>
+                    </div>
+                </form>
+                <div id="form-result" class="form-result"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/dae-sidebar-loader.js"></script>
+    <script>
+        document.getElementById('form-alta-alumno').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de la forma tradicional
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('form-result');
+
+            // Construir el objeto JSON a partir de los datos del formulario
+            const payload = {};
+            formData.forEach((value, key) => {
+                if (value) { // Solo incluir campos con valor
+                    // Convertir a número si es necesario
+                    if (key === 'id_carrera' || key === 'semestre_actual') {
+                        payload[key] = parseInt(value, 10);
+                    } else {
+                        payload[key] = value;
+                    }
+                }
+            });
+
+            // Mostrar el resultado
+            resultDiv.style.display = 'none';
+
+            try {
+                // Enviar la petición a la API
+                const response = await fetch('/saes-cloud-api/api/students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // En una aplicación real, el token se obtendría de localStorage o sessionStorage
+                        'Authorization': 'Bearer TU_ACCESS_TOKEN_DE_DAE'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Éxito (código 201 Created)
+                    resultDiv.className = 'form-result success';
+                    resultDiv.innerHTML = `<strong>Éxito:</strong> Alumno creado correctamente.
+                                           <br><strong>ID Alumno:</strong> ${data.id_alumno}
+                                           <br><strong>ID Usuario:</strong> ${data.id_usuario}`;
+                    form.reset(); // Limpiar el formulario
+                } else {
+                    // Error del servidor (4xx, 5xx)
+                    resultDiv.className = 'form-result error';
+                    resultDiv.innerHTML = `<strong>Error:</strong> ${data.error || 'Ocurrió un error al crear el alumno.'}`;
+                }
+            } catch (error) {
+                // Error de red o de conexión
+                resultDiv.className = 'form-result error';
+                resultDiv.innerHTML = `<strong>Error de Red:</strong> No se pudo conectar con el servidor. ${error.message}`;
+            }
+
+            resultDiv.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
