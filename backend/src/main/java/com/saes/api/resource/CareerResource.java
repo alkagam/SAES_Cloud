@@ -4,7 +4,9 @@ import com.saes.api.dto.CareerDTO;
 import com.saes.api.service.CareerService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class CareerResource {
     }
 
     @POST
-    public Response create(CareerDTO payload, @Context javax.ws.rs.core.UriInfo uriInfo) {
+    public Response create(CareerDTO payload, @Context UriInfo uriInfo) {
         CareerDTO created = careerService.create(payload);
         URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(created.getId_carrera())).build();
         return Response.created(uri).entity(created).build();
