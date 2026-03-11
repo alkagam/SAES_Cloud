@@ -771,7 +771,19 @@ public class BusinessResource {
             Enrollment e = documentToEnrollment(enrollmentDoc);
             if (e == null) return;
             Document groupDoc = groupsCollection.find(eq("_id", new ObjectId(e.id_grupo))).first();
-            if (groupDoc == null)  != null ? g.parcial_1 : null,
+            if (groupDoc == null) return;
+            if (id_periodo != null && !Objects.equals(groupDoc.getString("id_periodo"), id_periodo.toString())) return;
+
+            Grade g = documentToGrade(gradesCollection.find(eq("id_inscripcion", e.id_inscripcion)).first());
+            String subjectName = "";
+            Document subjectDoc = subjectsCollection.find(eq("_id", new ObjectId(groupDoc.getString("id_materia")))).first();
+            if (subjectDoc != null) {
+                subjectName = subjectDoc.getString("nombre");
+            }
+            result.add(Map.of("id_inscripcion", e.id_inscripcion,
+                    "materia", subjectName,
+                    "grupo", groupDoc.getString("clave_grupo"),
+                    "parcial_1", g != null ? g.parcial_1 : null,
                     "parcial_2", g != null ? g.parcial_2 : null,
                     "parcial_3", g != null ? g.parcial_3 : null,
                     "definitiva", g != null ? g.definitiva : null,
