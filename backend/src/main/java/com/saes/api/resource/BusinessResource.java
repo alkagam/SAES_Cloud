@@ -60,6 +60,44 @@ public class BusinessResource {
         this.usersCollection = database.getCollection("users");
     }
 
+    //*********** API-AUTH ***********
+
+    @POST
+    @Path("/login")
+    public Response login(Map<String, String> credentials) {
+        String identifier = credentials.get("identifier");
+        String password = credentials.get("password");
+
+        if (identifier == null || password == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(Map.of("error", "Identifier y password son requeridos")).build();
+        }
+
+        Document userDoc = usersCollection.find(eq("identifier", identifier)).first();
+
+        if (userDoc == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("error", "Credenciales incorrectas")).build();
+        }
+
+        // WARNING: Plain text password comparison. In a real application, use a secure hashing library like bcrypt.
+        String storedPassword = userDoc.getString("password_hash");
+        if (!password.equals(storedPassword)) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(Map.of("error", "Credenciales incorrectas")).build();
+        }
+
+        // Dummy token generation for the prototype
+        String accessToken = UUID.randomUUID().toString().replace("-", "");
+        String refreshToken = UUID.randomUUID().toString().replace("-", "");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("access_token", accessToken);
+        response.put("refresh_token", refreshToken);
+        response.put("expires_in", 900); // 15 minutes
+        response.put("rol", userDoc.getString("rol"));
+        response.put("id_usuario", userDoc.getObjectId("_id").toString());
+
+        return Response.ok(response).build();
+    }
+
     //*********** API-CATALOG ***********
 
     @POST
